@@ -6,135 +6,80 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* FULL SCREEN – NO EXTRA SPACE */
+/* FULL SCREEN APP */
 html, body {
   width: 100%;
   height: 100%;
+  background: #0f172a;   /* plain app background */
   overflow: hidden;
 }
 
-/* BACKGROUND */
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-}
-
-/* LOGIN CARD */
-.login-container {
+/* LOGIN & DASHBOARD */
+.login-container,
+.dashboard {
   width: 100%;
-  max-width: 380px;
+  height: 100%;
   background: #1e1e2f;
-  padding: 30px;
-  border-radius: 18px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-  text-align: center;
-  animation: fadeIn 0.8s ease-in-out;
+  padding: 25px;
+  color: white;
 }
 
-/* HEADING */
-.login-container h2 {
+/* HEADINGS */
+h2, h3 {
   color: #ff4f8b;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 /* INPUTS */
-.login-container input {
+input {
   width: 100%;
   padding: 12px;
   margin: 10px 0;
-  border-radius: 8px;
-  border: none;
-  outline: none;
   background: #2a2a40;
-  color: #ffffff;
-  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  color: white;
 }
 
-/* BUTTON */
-.login-container button {
+/* BUTTONS */
+button {
   width: 100%;
   padding: 12px;
-  margin-top: 15px;
+  margin: 8px 0;
   background: #ff4f8b;
   border: none;
   border-radius: 8px;
-  color: #ffffff;
+  color: white;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.login-container button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 79, 139, 0.5);
+/* MENU */
+.menu {
+  margin-bottom: 15px;
 }
 
-/* REGISTER TEXT */
-.register-text {
-  margin-top: 15px;
-  color: #cfcfcf;
-  font-size: 14px;
-}
-
-.register-text span {
-  color: #ff4f8b;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* ERROR MESSAGE */
-#error {
-  margin-top: 10px;
-  color: #ff6b6b;
-  font-size: 14px;
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.dashboard {
-  display: none;
-  width: 100%;
-  max-width: 420px;
-  background: #1e1e2f;
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-}
-
-.menu button {
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  background: #ff4f8b;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
+/* SECTIONS */
 .section {
   display: none;
-  margin-top: 15px;
-  text-align: left;
+  margin-top: 10px;
 }
 
+/* SOS */
 .sos-btn {
   background: red;
   font-size: 18px;
 }
 
+/* DEFENSE LIST */
 .defense-list li {
   margin: 8px 0;
+}
+
+/* ERROR */
+#error {
+  color: #ff6b6b;
+  margin-top: 10px;
+  text-align: center;
 }
