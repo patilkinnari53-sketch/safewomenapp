@@ -1,10 +1,42 @@
-// LOGIN
-function login() {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-  const error = document.getElementById("error");
+// SHOW SCREENS
+function showRegister() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("registerPage").style.display = "block";
+}
 
-  if (u === "admin" && p === "1234") {
+function showLogin() {
+  document.getElementById("registerPage").style.display = "none";
+  document.getElementById("loginPage").style.display = "block";
+}
+
+// REGISTER USER
+function register() {
+  const user = document.getElementById("regUsername").value;
+  const pass = document.getElementById("regPassword").value;
+  const error = document.getElementById("registerError");
+
+  if (user === "" || pass === "") {
+    error.textContent = "Please fill all fields";
+    return;
+  }
+
+  localStorage.setItem("username", user);
+  localStorage.setItem("password", pass);
+
+  alert("Registration Successful!");
+  showLogin();
+}
+
+// LOGIN USER
+function login() {
+  const user = document.getElementById("loginUsername").value;
+  const pass = document.getElementById("loginPassword").value;
+  const error = document.getElementById("loginError");
+
+  const savedUser = localStorage.getItem("username");
+  const savedPass = localStorage.getItem("password");
+
+  if (user === savedUser && pass === savedPass) {
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("dashboardPage").style.display = "block";
   } else {
@@ -18,9 +50,9 @@ function logout() {
   document.getElementById("loginPage").style.display = "block";
 }
 
-// SHOW SECTIONS
+// SECTIONS
 function showSection(id) {
-  document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+  document.querySelectorAll(".section").forEach(s => s.style.display = "none");
   document.getElementById(id).style.display = "block";
 }
 
@@ -28,22 +60,13 @@ function showSection(id) {
 function getLocation() {
   const out = document.getElementById("locationOutput");
 
-  if (!navigator.geolocation) {
-    out.textContent = "Location not supported";
-    return;
-  }
-
   navigator.geolocation.getCurrentPosition(
     pos => {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
       out.innerHTML = `
-        Latitude: ${lat}<br>
-        Longitude: ${lon}<br>
-        <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">
-          View on Map
-        </a>`;
+        Lat: ${pos.coords.latitude}<br>
+        Long: ${pos.coords.longitude}
+      `;
     },
-    () => out.textContent = "Permission denied"
+    () => out.textContent = "Location permission denied"
   );
 }
