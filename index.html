@@ -12,15 +12,36 @@
 <div class="login-container" id="loginPage">
   <h2>🔐 Login</h2>
 
-  <input type="text" id="username" placeholder="Username" />
-  <input type="password" id="password" placeholder="Password" />
+  <input type="text" id="loginUsername" placeholder="Username" />
+  <input type="password" id="loginPassword" placeholder="Password" />
 
   <button onclick="login()">Login</button>
-  <p id="error"></p>
+
+  <p class="switch">
+    New user? <span onclick="showRegister()">Register here</span>
+  </p>
+
+  <p id="loginError"></p>
+</div>
+
+<!-- REGISTER SCREEN -->
+<div class="login-container" id="registerPage" style="display:none;">
+  <h2>📝 Register</h2>
+
+  <input type="text" id="regUsername" placeholder="Create Username" />
+  <input type="password" id="regPassword" placeholder="Create Password" />
+
+  <button onclick="register()">Register</button>
+
+  <p class="switch">
+    Already registered? <span onclick="showLogin()">Login here</span>
+  </p>
+
+  <p id="registerError"></p>
 </div>
 
 <!-- DASHBOARD -->
-<div class="dashboard" id="dashboardPage">
+<div class="dashboard" id="dashboardPage" style="display:none;">
   <h2>👩‍🦰 Safe Women App</h2>
 
   <div class="menu">
@@ -30,29 +51,20 @@
     <button onclick="logout()">🚪 Logout</button>
   </div>
 
-  <!-- LOCATION -->
   <div class="section" id="location">
-    <h3>Your Live Location</h3>
     <button onclick="getLocation()">Get Location</button>
     <p id="locationOutput"></p>
   </div>
 
-  <!-- SOS -->
   <div class="section" id="sos">
-    <h3>Emergency SOS</h3>
-    <a href="tel:112">
-      <button class="sos-btn">CALL 112</button>
-    </a>
+    <a href="tel:112"><button class="sos-btn">CALL 112</button></a>
   </div>
 
-  <!-- SELF DEFENSE -->
   <div class="section" id="defense">
-    <h3>Self-Defense Techniques</h3>
     <ul class="defense-list">
       <li>👊 Hit nose or eyes</li>
-      <li>🦵 Kick knee or shin</li>
+      <li>🦵 Kick knee</li>
       <li>🗣️ Shout loudly</li>
-      <li>👜 Use bag or keys</li>
       <li>🏃 Run to safe place</li>
     </ul>
   </div>
