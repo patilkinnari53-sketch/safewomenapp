@@ -1,83 +1,86 @@
-// ================= PAGE NAVIGATION FUNCTION =================
-function showPage(pageId) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-
-    // Show selected page
-    document.getElementById(pageId).classList.add('active');
-}
-
-// Show login page by default
-showPage('login');
-
-// ================= REGISTER FUNCTION =================
-function register() {
-    // Store user credentials locally
-    localStorage.setItem("user", regUser.value);
-    localStorage.setItem("pass", regPass.value);
-
-    alert("Registration Successful!");
-    showPage('login');
-}
-
-// ================= LOGIN FUNCTION =================
 function login() {
-    let storedUser = localStorage.getItem("user");
-    let storedPass = localStorage.getItem("pass");
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const error = document.getElementById("error");
 
-    if (!storedUser || !storedPass) {
-        alert("No account found. Please register first!");
-        showPage('register');
-        return;
-    }
+  if (username === "" || password === "") {
+    error.textContent = "⚠ Please fill all fields";
+    return;
+  }
 
-    if (loginUser.value === storedUser && loginPass.value === storedPass) {
-        showPage('dashboard');
-    } else {
-        alert("Invalid Username or Password!");
-    }
+    // SHOW DASHBOARD AFTER LOGIN
+function login() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const error = document.getElementById("error");
+
+  if (username === "admin" && password === "1234") {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("dashboardPage").style.display = "block";
+  } else {
+    error.textContent = "❌ Invalid Username or Password!";
+  }
 }
 
-// ================= LOGOUT FUNCTION =================
+// LOGOUT
 function logout() {
-    showPage('login');
+  document.getElementById("dashboardPage").style.display = "none";
+  document.getElementById("loginPage").style.display = "block";
 }
 
-// ================= SOS FUNCTION =================
-function sendSOS() {
-    alert("🚨 SOS Alert Sent to Emergency Contact!");
-    getLocation();
+// SWITCH SECTIONS
+function showSection(sectionId) {
+  const sections = document.querySelectorAll(".section");
+  sections.forEach(sec => sec.style.display = "none");
+  document.getElementById(sectionId).style.display = "block";
 }
 
-// ================= LOCATION FUNCTION =================
+// LIVE LOCATION (FREE)
 function getLocation() {
-    navigator.geolocation.getCurrentPosition(position => {
-        location.innerText =
-            "📍 Latitude: " + position.coords.latitude +
-            " | Longitude: " + position.coords.longitude;
-    });
+  const output = document.getElementById("locationOutput");
+
+  if (!navigator.geolocation) {
+    output.textContent = "Geolocation not supported";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      output.innerHTML = `
+        Latitude: ${lat} <br>
+        Longitude: ${lon} <br>
+        <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">
+          View on Google Maps
+        </a>
+      `;
+    },
+    () => {
+      output.textContent = "Unable to fetch location";
+    }
+  );
 }
 
-// ================= CONTACT FUNCTIONS =================
-function saveContact() {
-    localStorage.setItem("contactName", contactName.value);
-    localStorage.setItem("contactNumber", contactNumber.value);
-
-    savedContact.innerText = "Saved Contact: " + contactName.value;
+function register() {
+  alert("Registration feature coming soon!");
 }
 
-function callContact() {
-    alert("Calling " + localStorage.getItem("contactName"));
+  // Demo credentials (for project)
+  if (username === "admin" && password === "1234") {
+    error.style.color = "#4ade80";
+    error.textContent = "✅ Login Successful!";
+    
+    setTimeout(() => {
+      alert("Welcome to Safe Women App!");
+      // window.location.href = "dashboard.html"; // optional
+    }, 800);
+  } else {
+    error.style.color = "#ff6b6b";
+    error.textContent = "❌ Invalid Username or Password!";
+  }
 }
 
-function sendSMS() {
-    alert("Emergency SMS Sent Successfully!");
-}
-
-// ================= INCIDENT REPORT =================
-function saveReport() {
-    localStorage.setItem("incidentReport", incidentText.value);
-    alert("Incident Report Saved!");
+function register() {
+  alert("Registration feature coming soon!");
 }
