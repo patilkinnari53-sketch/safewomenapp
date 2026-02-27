@@ -1,85 +1,89 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: Arial, sans-serif;
 }
 
-/* FULL SCREEN APP */
-html, body {
-  width: 100%;
-  height: 100%;
-  background: #0f172a;   /* plain app background */
-  overflow: hidden;
+body {
+  background: #ffffff;
 }
 
-/* LOGIN & DASHBOARD */
-.login-container,
-.dashboard {
-  width: 100%;
-  height: 100%;
+/* LOGIN & REGISTER */
+.login-container {
+  max-width: 380px;
+  margin: 80px auto;
   background: #1e1e2f;
   padding: 25px;
+  border-radius: 15px;
+  text-align: center;
   color: white;
 }
 
-/* HEADINGS */
-h2, h3 {
+.login-container h2 {
   color: #ff4f8b;
   margin-bottom: 15px;
-  text-align: center;
 }
 
-/* INPUTS */
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  background: #2a2a40;
-  border: none;
-  border-radius: 8px;
-  color: white;
-}
-
-/* BUTTONS */
-button {
+.login-container input {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  background: #2a2a40;
+  color: white;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
   background: #ff4f8b;
   border: none;
   border-radius: 8px;
   color: white;
-  font-size: 16px;
   cursor: pointer;
 }
 
-/* MENU */
-.menu {
-  margin-bottom: 15px;
+.login-container span {
+  color: #ff4f8b;
+  cursor: pointer;
 }
 
-/* SECTIONS */
-.section {
-  display: none;
-  margin-top: 10px;
+.error {
+  color: #ff6b6b;
+  margin-top: 8px;
 }
 
-/* SOS */
-.sos-btn {
+/* DASHBOARD */
+.dashboard {
+  max-width: 420px;
+  margin: 50px auto;
+  background: #1e1e2f;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+}
+
+.dashboard button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 8px;
+  background: #ff4f8b;
+  color: white;
+  cursor: pointer;
+}
+
+.sos {
   background: red;
   font-size: 18px;
 }
 
-/* DEFENSE LIST */
-.defense-list li {
-  margin: 8px 0;
-}
-
-/* ERROR */
-#error {
-  color: #ff6b6b;
-  margin-top: 10px;
-  text-align: center;
+#output {
+  margin-top: 15px;
+  text-align: left;
 }
