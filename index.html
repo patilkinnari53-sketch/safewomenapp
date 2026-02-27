@@ -1,48 +1,44 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Safe Women App</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-container" id="loginPage">
-  <h2>🔐 Login</h2>
-
-  <input type="text" id="loginUsername" placeholder="Username" />
-  <input type="password" id="loginPassword" placeholder="Password" />
-
-  <button onclick="login()">Login</button>
-
-  <p class="switch">
-    New user? <span onclick="showRegister()">Register here</span>
-  </p>
-
+  <h2>Login</h2>
+  <input type="text" id="loginUsername" placeholder="Username">
+  <input type="password" id="loginPassword" placeholder="Password">
+  <button type="button" onclick="login()">Login</button>
+  <p>New user? <span onclick="showRegister()">Register</span></p>
   <p id="loginError"></p>
 </div>
 
-<!-- REGISTER SCREEN -->
+<!-- REGISTER -->
 <div class="login-container" id="registerPage" style="display:none;">
-  <h2>📝 Register</h2>
-
-  <input type="text" id="regUsername" placeholder="Create Username" />
-  <input type="password" id="regPassword" placeholder="Create Password" />
-
-  <button onclick="register()">Register</button>
-
-  <p class="switch">
-    Already registered? <span onclick="showLogin()">Login here</span>
-  </p>
-
+  <h2>Register</h2>
+  <input type="text" id="regUsername" placeholder="Create Username">
+  <input type="password" id="regPassword" placeholder="Create Password">
+  <button type="button" onclick="register()">Register</button>
+  <p>Already registered? <span onclick="showLogin()">Login</span></p>
   <p id="registerError"></p>
 </div>
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboardPage" style="display:none;">
-  <h2>👩‍🦰 Safe Women App</h2>
+  <h2>Safe Women Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
 
   <div class="menu">
     <button onclick="showSection('location')">📍 Live Location</button>
@@ -73,3 +69,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
