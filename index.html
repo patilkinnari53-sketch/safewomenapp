@@ -1,133 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-
-    <!-- App Title -->
-    <title>Women Safety App</title>
-
-    <!-- Linking External Dark Theme CSS -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe Women App</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ================= MAIN APP CONTAINER ================= -->
-<div class="app">
+<!-- 🔐 LOGIN SECTION -->
+<div class="login-container" id="loginPage">
+  <h2>🔐 Login</h2>
 
-    <!-- ========== LOGIN PAGE ========== -->
-    <div id="login" class="page active card">
-        <h2>🔐 Login</h2>
+  <input type="text" id="username" placeholder="Enter Username" />
+  <input type="password" id="password" placeholder="Enter Password" />
 
-        <!-- Username Input -->
-        <input type="text" id="loginUser" placeholder="Enter Username">
+  <button onclick="login()">Login</button>
 
-        <!-- Password Input -->
-        <input type="password" id="loginPass" placeholder="Enter Password">
+  <p class="register-text">
+    New user? <span onclick="register()">Register here</span>
+  </p>
 
-        <!-- Login Button -->
-        <button onclick="login()">Login</button>
-
-        <!-- Navigation to Register -->
-        <p onclick="showPage('register')">New user? Register here</p>
-    </div>
-
-    <!-- ========== REGISTER PAGE ========== -->
-    <div id="register" class="page card">
-        <h2>📝 Register</h2>
-
-        <input type="text" id="regUser" placeholder="Create Username">
-        <input type="password" id="regPass" placeholder="Create Password">
-
-        <button onclick="register()">Register</button>
-
-        <p onclick="showPage('login')">Already have an account?</p>
-    </div>
-
-    <!-- ========== DASHBOARD PAGE ========== -->
-    <div id="dashboard" class="page card">
-        <h2>🏠 Dashboard</h2>
-      <!-- ===== SAFETY IMAGE SLIDER ===== -->
-<div class="slider">
-    <img id="slideImage" src="https://i.imgur.com/9QZ7QYp.gif" alt="Safety Slide">
+  <p id="error"></p>
 </div>
 
-        <!-- Emergency SOS Button -->
-        <button class="sos" onclick="sendSOS()">🚨 EMERGENCY SOS</button>
+<!-- 🏠 DASHBOARD -->
+<div class="dashboard" id="dashboardPage">
+  <h2>👩‍🦰 Safe Women App</h2>
 
-        <!-- Location Section -->
-        <div class="info">
-            <p id="location">📍 Location not fetched</p>
-            <button onclick="getLocation()">Get Live Location</button>
-        </div>
+  <div class="menu">
+    <button onclick="showSection('locationSection')">📍 Live Location</button>
+    <button onclick="showSection('sosSection')">🚨 SOS Emergency</button>
+    <button onclick="showSection('defenseSection')">🥋 Self Defense</button>
+    <button onclick="logout()">🚪 Logout</button>
+  </div>
 
-        <!-- Navigation Buttons -->
-        <button onclick="showPage('contacts')">📞 Emergency Contact</button>
-        <button onclick="showPage('defense')">🛡 Self Defense</button>
-        <button onclick="showPage('report')">📝 Incident Report</button>
+  <!-- 📍 LIVE LOCATION -->
+  <div class="section" id="locationSection">
+    <h3>📍 Your Live Location</h3>
+    <button onclick="getLocation()">Get My Location</button>
+    <p id="locationOutput"></p>
+  </div>
 
-        <!-- Logout -->
-        <button class="logout" onclick="logout()">Logout</button>
-    </div>
+  <!-- 🚨 SOS -->
+  <div class="section" id="sosSection">
+    <h3>🚨 Emergency SOS</h3>
+    <p>Tap the button below to call emergency number</p>
+    <a href="tel:112">
+      <button class="sos-btn">CALL SOS</button>
+    </a>
+  </div>
 
-    <!-- ========== EMERGENCY CONTACT PAGE ========== -->
-    <div id="contacts" class="page card">
-        <h2>📞 Emergency Contact</h2>
-
-        <input type="text" id="contactName" placeholder="Contact Name">
-        <input type="text" id="contactNumber" placeholder="Contact Number">
-
-        <button onclick="saveContact()">Save Contact</button>
-
-        <p id="savedContact"></p>
-
-        <button onclick="callContact()">Call Contact</button>
-        <button onclick="sendSMS()">Send Emergency SMS</button>
-
-        <button onclick="showPage('dashboard')">⬅ Back</button>
-    </div>
-
-    <!-- ========== SELF DEFENSE PAGE ========== -->
-  
-    <div id="defense" class="page card">
-        <h2>🛡 Self Defense Techniques</h2>
-
-        <div class="tech">
-            <h3>👊 Palm Strike</h3>
-            <p>Use the base of your palm to strike the attacker’s nose or chin.</p>
-        </div>
-
-        <div class="tech">
-            <h3>🦵 Knee Strike</h3>
-            <p>Strike the groin or stomach to weaken the attacker.</p>
-        </div>
-
-        <div class="tech">
-            <h3>🖐 Eye Jab</h3>
-            <p>Quickly jab the eyes using fingers and escape.</p>
-        </div>
-
-        <div class="tech">
-            <h3>🗣 Loud Voice</h3>
-            <p>Shout loudly to attract attention and scare attacker.</p>
-        </div>
-
-        <button onclick="showPage('dashboard')">⬅ Back</button>
-    </div>
-
-    <!-- ========== INCIDENT REPORT PAGE ========== -->
-    <div id="report" class="page card">
-        <h2>📝 Incident Report</h2>
-
-        <textarea id="incidentText" placeholder="Describe the incident in detail..."></textarea>
-
-        <button onclick="saveReport()">Save Report</button>
-        <button onclick="showPage('dashboard')">⬅ Back</button>
-    </div>
-
+  <!-- 🥋 SELF DEFENSE -->
+  <div class="section" id="defenseSection">
+    <h3>🥋 Self-Defense Techniques</h3>
+    <ul class="defense-list">
+      <li>👊 Strike nose or eyes to escape</li>
+      <li>🦵 Kick knee or shin hard</li>
+      <li>🗣️ Shout loudly for help</li>
+      <li>👜 Use keys or bag for defense</li>
+      <li>🏃 Run to crowded area</li>
+    </ul>
+  </div>
 </div>
 
-<!-- Linking External JavaScript -->
 <script src="script.js"></script>
-
 </body>
 </html>
