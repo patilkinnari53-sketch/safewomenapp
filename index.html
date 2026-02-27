@@ -8,58 +8,52 @@
 </head>
 <body>
 
-<!-- 🔐 LOGIN SECTION -->
+<!-- LOGIN SCREEN -->
 <div class="login-container" id="loginPage">
   <h2>🔐 Login</h2>
 
-  <input type="text" id="username" placeholder="Enter Username" />
-  <input type="password" id="password" placeholder="Enter Password" />
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
 
   <button onclick="login()">Login</button>
-
-  <p class="register-text">
-    New user? <span onclick="register()">Register here</span>
-  </p>
-
   <p id="error"></p>
 </div>
 
-<!-- 🏠 DASHBOARD -->
+<!-- DASHBOARD -->
 <div class="dashboard" id="dashboardPage">
   <h2>👩‍🦰 Safe Women App</h2>
 
   <div class="menu">
-    <button onclick="showSection('locationSection')">📍 Live Location</button>
-    <button onclick="showSection('sosSection')">🚨 SOS Emergency</button>
-    <button onclick="showSection('defenseSection')">🥋 Self Defense</button>
+    <button onclick="showSection('location')">📍 Live Location</button>
+    <button onclick="showSection('sos')">🚨 SOS</button>
+    <button onclick="showSection('defense')">🥋 Self Defense</button>
     <button onclick="logout()">🚪 Logout</button>
   </div>
 
-  <!-- 📍 LIVE LOCATION -->
-  <div class="section" id="locationSection">
-    <h3>📍 Your Live Location</h3>
-    <button onclick="getLocation()">Get My Location</button>
+  <!-- LOCATION -->
+  <div class="section" id="location">
+    <h3>Your Live Location</h3>
+    <button onclick="getLocation()">Get Location</button>
     <p id="locationOutput"></p>
   </div>
 
-  <!-- 🚨 SOS -->
-  <div class="section" id="sosSection">
-    <h3>🚨 Emergency SOS</h3>
-    <p>Tap the button below to call emergency number</p>
+  <!-- SOS -->
+  <div class="section" id="sos">
+    <h3>Emergency SOS</h3>
     <a href="tel:112">
-      <button class="sos-btn">CALL SOS</button>
+      <button class="sos-btn">CALL 112</button>
     </a>
   </div>
 
-  <!-- 🥋 SELF DEFENSE -->
-  <div class="section" id="defenseSection">
-    <h3>🥋 Self-Defense Techniques</h3>
+  <!-- SELF DEFENSE -->
+  <div class="section" id="defense">
+    <h3>Self-Defense Techniques</h3>
     <ul class="defense-list">
-      <li>👊 Strike nose or eyes to escape</li>
-      <li>🦵 Kick knee or shin hard</li>
-      <li>🗣️ Shout loudly for help</li>
-      <li>👜 Use keys or bag for defense</li>
-      <li>🏃 Run to crowded area</li>
+      <li>👊 Hit nose or eyes</li>
+      <li>🦵 Kick knee or shin</li>
+      <li>🗣️ Shout loudly</li>
+      <li>👜 Use bag or keys</li>
+      <li>🏃 Run to safe place</li>
     </ul>
   </div>
 </div>
