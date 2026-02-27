@@ -1,72 +1,45 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Safe Women App</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- LOGIN -->
-<div class="login-container" id="loginPage">
-  <h2>Login</h2>
-  <input type="text" id="loginUsername" placeholder="Username">
-  <input type="password" id="loginPassword" placeholder="Password">
-  <button type="button" onclick="login()">Login</button>
+<div class="login-container" id="loginBox">
+  <h2>🔐 Login</h2>
+  <input type="text" id="loginUser" placeholder="Username">
+  <input type="password" id="loginPass" placeholder="Password">
+  <button onclick="login()">Login</button>
   <p>New user? <span onclick="showRegister()">Register</span></p>
-  <p id="loginError"></p>
+  <p id="loginError" class="error"></p>
 </div>
 
 <!-- REGISTER -->
-<div class="login-container" id="registerPage" style="display:none;">
-  <h2>Register</h2>
-  <input type="text" id="regUsername" placeholder="Create Username">
-  <input type="password" id="regPassword" placeholder="Create Password">
-  <button type="button" onclick="register()">Register</button>
+<div class="login-container" id="registerBox" style="display:none;">
+  <h2>📝 Register</h2>
+  <input type="text" id="regUser" placeholder="Create Username">
+  <input type="password" id="regPass" placeholder="Create Password">
+  <button onclick="register()">Register</button>
   <p>Already registered? <span onclick="showLogin()">Login</span></p>
-  <p id="registerError"></p>
+  <p id="regError" class="error"></p>
 </div>
 
 <!-- DASHBOARD -->
-<div class="dashboard" id="dashboardPage" style="display:none;">
-  <h2>Safe Women Dashboard</h2>
-  <button onclick="logout()">Logout</button>
+<div class="dashboard" id="dashboard" style="display:none;">
+  <h2>👩‍🦰 Safe Women Dashboard</h2>
+
+  <button class="sos" onclick="sos()">🚨 SOS Emergency</button>
+  <button onclick="getLocation()">📍 Share Live Location</button>
+  <button onclick="showDefense()">🥋 Self Defense Tips</button>
+  <button onclick="logout()">🚪 Logout</button>
+
+  <div id="output"></div>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-  <div class="menu">
-    <button onclick="showSection('location')">📍 Live Location</button>
-    <button onclick="showSection('sos')">🚨 SOS</button>
-    <button onclick="showSection('defense')">🥋 Self Defense</button>
-    <button onclick="logout()">🚪 Logout</button>
-  </div>
-
-  <div class="section" id="location">
-    <button onclick="getLocation()">Get Location</button>
-    <p id="locationOutput"></p>
-  </div>
-
-  <div class="section" id="sos">
-    <a href="tel:112"><button class="sos-btn">CALL 112</button></a>
-  </div>
-
-  <div class="section" id="defense">
-    <ul class="defense-list">
-      <li>👊 Hit nose or eyes</li>
-      <li>🦵 Kick knee</li>
-      <li>🗣️ Shout loudly</li>
-      <li>🏃 Run to safe place</li>
-    </ul>
-  </div>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
-
