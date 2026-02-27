@@ -1,24 +1,14 @@
+// LOGIN
 function login() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
   const error = document.getElementById("error");
 
-  if (username === "" || password === "") {
-    error.textContent = "⚠ Please fill all fields";
-    return;
-  }
-
-    // SHOW DASHBOARD AFTER LOGIN
-function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const error = document.getElementById("error");
-
-  if (username === "admin" && password === "1234") {
+  if (u === "admin" && p === "1234") {
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("dashboardPage").style.display = "block";
   } else {
-    error.textContent = "❌ Invalid Username or Password!";
+    error.textContent = "Invalid Username or Password!";
   }
 }
 
@@ -28,59 +18,32 @@ function logout() {
   document.getElementById("loginPage").style.display = "block";
 }
 
-// SWITCH SECTIONS
-function showSection(sectionId) {
-  const sections = document.querySelectorAll(".section");
-  sections.forEach(sec => sec.style.display = "none");
-  document.getElementById(sectionId).style.display = "block";
+// SHOW SECTIONS
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+  document.getElementById(id).style.display = "block";
 }
 
-// LIVE LOCATION (FREE)
+// LIVE LOCATION
 function getLocation() {
-  const output = document.getElementById("locationOutput");
+  const out = document.getElementById("locationOutput");
 
   if (!navigator.geolocation) {
-    output.textContent = "Geolocation not supported";
+    out.textContent = "Location not supported";
     return;
   }
 
   navigator.geolocation.getCurrentPosition(
-    position => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      output.innerHTML = `
-        Latitude: ${lat} <br>
-        Longitude: ${lon} <br>
+    pos => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      out.innerHTML = `
+        Latitude: ${lat}<br>
+        Longitude: ${lon}<br>
         <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">
-          View on Google Maps
-        </a>
-      `;
+          View on Map
+        </a>`;
     },
-    () => {
-      output.textContent = "Unable to fetch location";
-    }
+    () => out.textContent = "Permission denied"
   );
-}
-
-function register() {
-  alert("Registration feature coming soon!");
-}
-
-  // Demo credentials (for project)
-  if (username === "admin" && password === "1234") {
-    error.style.color = "#4ade80";
-    error.textContent = "✅ Login Successful!";
-    
-    setTimeout(() => {
-      alert("Welcome to Safe Women App!");
-      // window.location.href = "dashboard.html"; // optional
-    }, 800);
-  } else {
-    error.style.color = "#ff6b6b";
-    error.textContent = "❌ Invalid Username or Password!";
-  }
-}
-
-function register() {
-  alert("Registration feature coming soon!");
 }
