@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — SafeHer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
+  </script>
+  <style>.dark-loading body { background: #121212; }</style>
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page">
+  <h1 id="welcome">Welcome 👋</h1>
+  <p class="subtitle">You're safe. We're here for you.</p>
+
+  <div class="sos-wrap">
+    <button class="sos-btn" id="sosBtn" onclick="startSOS()">SOS</button>
+    <p style="margin-top:25px;font-weight:bold;color:var(--primary);font-size:17px">
+      Press the button in an emergency
+    </p>
+    <p id="sosStatus" style="margin-top:12px;font-size:15px"></p>
+    <p style="margin-top:6px;font-size:13px;color:var(--text-dim)">
+      (You'll have 5 seconds to cancel)
+    </p>
+  </div>
+
+  <h2 style="color:var(--primary);text-align:center;margin-top:50px">⚡ Quick Helplines</h2>
+  <div class="grid" style="margin-top:20px">
+    <a class="helpline" href="tel:1091"><div class="icon">📞</div><strong>Police</strong><div class="num">1091</div></a>
+    <a class="helpline" href="tel:181"><div class="icon">🆘</div><strong>Women Helpline</strong><div class="num">181</div></a>
+    <a class="helpline" href="tel:112"><div class="icon">🚑</div><strong>Emergency</strong><div class="num">112</div></a>
+    <a class="helpline" href="tel:1098"><div class="icon">👶</div><strong>Child Helpline</strong><div class="num">1098</div></a>
+  </div>
+
+  <h2 style="color:var(--primary);margin-top:50px">📊 Your Safety Snapshot</h2>
+  <div class="grid" style="margin-top:20px">
+    <div class="card"><div style="font-size:40px">👥</div><h3 id="contactCount">0</h3><p>Emergency Contacts</p></div>
+    <div class="card"><div style="font-size:40px">📜</div><h3 id="alertCount">0</h3><p>Total Alerts Sent</p></div>
+    <div class="card"><div style="font-size:40px">✅</div><h3 id="resolvedCount">0</h3><p>Resolved Alerts</p></div>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div class="toast" id="toast"></div>
+
+<script src="theme.js"></script>
+<script>
+  if (!guardAuth()) { /* redirected */ }
+
+  (function init() {
+    const user = DB.getUser();
+    if (user) document.getElementById('welcome').textContent = `Welcome, ${user.fullName} 👋`;
+    refreshStats();
+  })();
+
+  function refreshStats() {
+    document.getElementById('contactCount').textContent = DB.getContacts().length;
+    const alerts = DB.getAlerts();
+    document.getElementById('alertCount').textContent = alerts.length;
+    document.getElementById('resolvedCount').textContent =
+      alerts.filter(a => a.status === 'RESOLVED').length;
+  }
+</script>
+</body>
+</html>
