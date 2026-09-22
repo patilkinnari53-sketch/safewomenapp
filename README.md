@@ -311,7 +311,6 @@ If SafeHer helped you or someone you know:
 
 **#StaySafe #WomenSafety #SafeHer**
 
-**⭐ Star this repo if you believe in a safer world for women ⭐**
 
 </div>
 
