@@ -1,0 +1,22 @@
+<!-- ============ SafeHer — Shared Footer ============ -->
+<footer>
+  <p>🛡️ <strong>SafeHer</strong> — Keeping women safe, one alert at a time.</p>
+  <p style="margin-top:10px">
+    <a href="index.html">Home</a> •
+    <a href="about.html">About</a> •
+    <a href="tips.html">Helplines</a> •
+    <a href="profile.html">Profile</a>
+  </p>
+  <p style="margin-top:14px;font-size:13px;opacity:0.7">
+    © <span id="year"></span> SafeHer • Made with ❤️ • 
+    Data stored only in your browser
+  </p>
+</footer>
+
+<script>
+  // Set current year
+  document.addEventListener('DOMContentLoaded', () => {
+    const y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+  });
+</script>
