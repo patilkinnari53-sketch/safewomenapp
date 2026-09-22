@@ -1,10 +1,82 @@
-/* ============ SafeHer — Global Theme + Helpers + Animations ============ */
+/* ============ SafeHer — Global Theme + Header/Footer Loader ============ */
 
+// Apply theme BEFORE page renders (avoid flash)
 (function applyStoredTheme() {
   const saved = localStorage.getItem('theme') || 'light';
   if (saved === 'dark') document.documentElement.classList.add('dark-loading');
 })();
 
+/* ============ Load Header & Footer Dynamically ============ */
+async function loadPartials() {
+  const navContainer = document.getElementById('nav-placeholder');
+  const footerContainer = document.getElementById('footer-placeholder');
+
+  try {
+    if (navContainer) {
+      const res = await fetch('header.html');
+      navContainer.innerHTML = await res.text();
+    }
+  } catch (e) {
+    console.error('Failed to load header:', e);
+  }
+
+  try {
+    if (footerContainer) {
+      const res = await fetch('footer.html');
+      footerContainer.innerHTML = await res.text();
+      // Re-run inline scripts in footer (for year)
+      footerContainer.querySelectorAll('script').forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        document.body.appendChild(newScript);
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load footer:', e);
+  }
+
+  // After partials loaded, apply the rest
+  applyThemeAndSetup();
+}
+
+/* ============ Setup After Header/Footer Load ============ */
+function applyThemeAndSetup() {
+  const saved = localStorage.getItem('theme') || 'light';
+  if (saved === 'dark') document.body.classList.add('dark');
+  document.documentElement.classList.remove('dark-loading');
+
+  updateThemeButton();
+  highlightActiveLink();
+  renderAuthLink();
+  createParticles();
+  attachPageTransition();
+
+  // Set year directly too (as fallback)
+  const y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
+}
+
+/* ============ Highlight Current Page in Navbar ============ */
+function highlightActiveLink() {
+  const path = location.pathname.split('/').pop() || 'index.html';
+  const map = {
+    'index.html': 'home',
+    'dashboard.html': 'dashboard',
+    'contacts.html': 'contacts',
+    'location.html': 'location',
+    'alerts.html': 'alerts',
+    'profile.html': 'profile',
+    'tips.html': 'tips',
+    'about.html': 'about'
+  };
+  const page = map[path];
+  if (!page) return;
+  document.querySelectorAll('nav a[data-page]').forEach(a => {
+    if (a.dataset.page === page) a.classList.add('active');
+  });
+}
+
+/* ============ Floating Particles ============ */
 function createParticles() {
   const count = 12;
   for (let i = 0; i < count; i++) {
@@ -22,14 +94,24 @@ function createParticles() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('theme') || 'light';
-  if (saved === 'dark') document.body.classList.add('dark');
-  document.documentElement.classList.remove('dark-loading');
-  updateThemeButton();
-  createParticles();
-});
+/* ============ Smooth Page Transition ============ */
+function attachPageTransition() {
+  document.querySelectorAll('a[href$=".html"]').forEach(a => {
+    if (a._transitionBound) return;
+    a._transitionBound = true;
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('#') || href === 'header.html' || href === 'footer.html') return;
+      e.preventDefault();
+      document.querySelector('.page')?.classList.add('page-exit');
+      document.body.style.transition = 'opacity 0.3s';
+      document.body.style.opacity = '0';
+      setTimeout(() => location.href = href, 280);
+    });
+  });
+}
 
+/* ============ Theme Toggle ============ */
 function toggleTheme() {
   const isDark = document.body.classList.toggle('dark');
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -45,6 +127,7 @@ function updateThemeButton() {
   btn.title = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
 }
 
+/* ============ Local Storage DB ============ */
 const DB = {
   getUser: () => JSON.parse(localStorage.getItem('user') || 'null'),
   setUser: (u) => localStorage.setItem('user', JSON.stringify(u)),
@@ -55,6 +138,7 @@ const DB = {
   setAlerts: (a) => localStorage.setItem('alerts', JSON.stringify(a)),
 };
 
+/* ============ Toast ============ */
 function toast(msg) {
   let t = document.getElementById('toast');
   if (!t) {
@@ -68,17 +152,20 @@ function toast(msg) {
   t._timer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+/* ============ Auth Guard ============ */
 function guardAuth(redirect = 'login.html') {
   if (!DB.getUser()) { location.href = redirect; return false; }
   return true;
 }
 
+/* ============ Logout ============ */
 function logout() {
   DB.logout();
   toast('Logged out');
   setTimeout(() => location.href = 'index.html', 700);
 }
 
+/* ============ Auth Link in Navbar ============ */
 function renderAuthLink() {
   const el = document.getElementById('authLink');
   if (!el) return;
@@ -88,21 +175,6 @@ function renderAuthLink() {
     el.innerHTML = '<a href="login.html">Login</a>';
   }
 }
-document.addEventListener('DOMContentLoaded', renderAuthLink);
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('a[href$=".html"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      const href = a.getAttribute('href');
-      if (!href || href.startsWith('http') || href.startsWith('#')) return;
-      e.preventDefault();
-      document.querySelector('.page')?.classList.add('page-exit');
-      document.body.style.transition = 'opacity 0.3s';
-      document.body.style.opacity = '0';
-      setTimeout(() => location.href = href, 280);
-    });
-  });
-});
 
 /* ============ SOS with Countdown ============ */
 let sosTimer = null;
@@ -188,3 +260,8 @@ function sendSOSAlert() {
     { enableHighAccuracy: true, timeout: 10000 }
   );
 }
+
+/* ============ Auto-Load Partials on DOM Ready ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  loadPartials();
+});
