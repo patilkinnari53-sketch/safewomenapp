@@ -8,15 +8,556 @@
   <script>
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
   </script>
-  <style>.dark-loading body { background: #121212; }</style>
+  <style>
+    .dark-loading body { background: #121212; }
+
+    /* ---- DASHBOARD-SPECIFIC STYLES ---- */
+
+    /* Trust banner */
+    .trust-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 22px;
+      background: linear-gradient(135deg, rgba(40,167,69,0.12), rgba(40,167,69,0.05));
+      border-left: 4px solid #28a745;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      animation: slideInLeft 0.6s ease;
+    }
+    body.dark .trust-banner {
+      background: linear-gradient(135deg, rgba(40,167,69,0.15), rgba(40,167,69,0.03));
+    }
+    .trust-banner .dot {
+      width: 12px; height: 12px;
+      background: #28a745;
+      border-radius: 50%;
+      animation: pulseDot 1.5s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(40,167,69,0.7); }
+      50% { box-shadow: 0 0 0 10px rgba(40,167,69,0); }
+    }
+    .trust-banner strong { color: var(--text); font-size: 15px; }
+    .trust-banner p { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+
+    /* Safety score circular */
+    .score-wrap {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      background: var(--card-bg);
+      padding: 26px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px var(--shadow);
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+      animation: fadeSlideIn 0.7s ease;
+    }
+    .score-ring {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      flex-shrink: 0;
+    }
+    .score-ring svg {
+      transform: rotate(-90deg);
+      width: 130px;
+      height: 130px;
+    }
+    .score-ring .ring-bg {
+      fill: none;
+      stroke: rgba(123,31,162,0.12);
+      stroke-width: 12;
+    }
+    .score-ring .ring-fill {
+      fill: none;
+      stroke: url(#ringGradient);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 377;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .score-ring .score-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-ring .score-text .num {
+      font-size: 34px;
+      font-weight: bold;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .score-ring .score-text .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .score-info h3 {
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+    .score-info p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .score-info .tip {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 14px;
+      background: rgba(233,30,99,0.1);
+      color: var(--accent);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .score-info .tip:hover {
+      background: rgba(233,30,99,0.2);
+      transform: translateX(4px);
+    }
+
+    /* Trust badges row */
+    .trust-badges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .trust-badge {
+      background: var(--card-bg);
+      padding: 16px 14px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px var(--shadow);
+      text-align: center;
+      transition: all 0.3s ease;
+      animation: cardEnter 0.5s ease backwards;
+    }
+    .trust-badge:nth-child(1) { animation-delay: 0.05s; }
+    .trust-badge:nth-child(2) { animation-delay: 0.1s; }
+    .trust-badge:nth-child(3) { animation-delay: 0.15s; }
+    .trust-badge:nth-child(4) { animation-delay: 0.2s; }
+    .trust-badge:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px var(--shadow-strong);
+    }
+    .trust-badge .tb-icon { font-size: 26px; }
+    .trust-badge .tb-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 6px;
+    }
+    .trust-badge .tb-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Setup checklist */
+    .checklist {
+      background: var(--card-bg);
+      padding: 26px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px var(--shadow);
+      margin-bottom: 26px;
+      animation: fadeSlideIn 0.7s ease 0.2s backwards;
+    }
+    .checklist h3 {
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checklist .cl-sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: var(--bg);
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .check-item:hover {
+      background: rgba(123,31,162,0.08);
+      transform: translateX(6px);
+    }
+    .check-item.done { opacity: 0.7; }
+    .check-item .check-box {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .check-item.done .check-box {
+      background: #28a745;
+      border-color: #28a745;
+      animation: checkPop 0.5s ease;
+    }
+    @keyframes checkPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .check-item .check-text { flex: 1; }
+    .check-item .check-text strong {
+      color: var(--text);
+      font-size: 15px;
+      display: block;
+    }
+    .check-item .check-text small {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .check-item .arrow {
+      color: var(--primary);
+      font-size: 18px;
+      opacity: 0.6;
+    }
+
+    /* Recent activity */
+    .activity {
+      background: var(--card-bg);
+      padding: 26px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px var(--shadow);
+      margin-bottom: 26px;
+      animation: fadeSlideIn 0.7s ease 0.3s backwards;
+    }
+    .activity h3 {
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item .ai-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(123,31,162,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .activity-item .ai-content { flex: 1; }
+    .activity-item .ai-content strong {
+      color: var(--text);
+      font-size: 14px;
+      display: block;
+    }
+    .activity-item .ai-content small {
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+    .activity-empty {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+    }
+
+    /* Privacy promise */
+    .privacy-card {
+      background: linear-gradient(135deg, rgba(123,31,162,0.08), rgba(233,30,99,0.06));
+      padding: 26px;
+      border-radius: 16px;
+      border: 1px dashed var(--primary);
+      margin-bottom: 26px;
+      animation: fadeSlideIn 0.7s ease 0.4s backwards;
+    }
+    body.dark .privacy-card {
+      background: linear-gradient(135deg, rgba(185,104,214,0.1), rgba(255,77,109,0.06));
+    }
+    .privacy-card h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .privacy-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .privacy-card ul {
+      padding-left: 22px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    /* How it protects */
+    .protect-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+    .protect-card {
+      background: var(--card-bg);
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px var(--shadow);
+      text-align: center;
+      transition: all 0.4s ease;
+      animation: cardEnter 0.5s ease backwards;
+    }
+    .protect-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px var(--shadow-strong);
+    }
+    .protect-card .pc-icon {
+      font-size: 40px;
+      display: inline-block;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .protect-card h4 {
+      color: var(--primary);
+      margin: 10px 0 6px;
+      font-size: 16px;
+    }
+    .protect-card p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* Section title inside dashboard */
+    .dash-title {
+      color: var(--primary);
+      margin: 40px 0 16px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeSlideIn 0.6s ease;
+    }
+
+    /* Emergency card */
+    .emergency-card {
+      background: linear-gradient(135deg, #c9184a, #7B1FA2);
+      color: white;
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 26px;
+      box-shadow: 0 8px 30px rgba(201,24,74,0.3);
+      animation: fadeSlideIn 0.7s ease 0.5s backwards;
+      position: relative;
+      overflow: hidden;
+    }
+    .emergency-card::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+      border-radius: 50%;
+    }
+    .emergency-card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .emergency-card p {
+      font-size: 15px;
+      margin-bottom: 18px;
+      opacity: 0.95;
+      position: relative;
+    }
+    .emergency-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .emergency-actions a, .emergency-actions button {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    .emergency-actions a:hover, .emergency-actions button:hover {
+      background: white;
+      color: #c9184a;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
 </head>
 <body>
 
 <div id="nav-placeholder"></div>
 
 <div class="page">
+
+  <!-- ============ WELCOME + TRUST BANNER ============ -->
   <h1 id="welcome">Welcome 👋</h1>
-  <p class="subtitle">You're safe. We're here for you.</p>
+  <p class="subtitle">You're safe. We're here for you, 24/7.</p>
+
+  <div class="trust-banner">
+    <span class="dot"></span>
+    <div>
+      <strong>✅ Protected Status: Active</strong>
+      <p>Your account is secure. Data stored only on this device.</p>
+    </div>
+  </div>
+
+  <!-- ============ SAFETY SCORE ============ -->
+  <div class="score-wrap">
+    <div class="score-ring">
+      <svg viewBox="0 0 130 130">
+        <defs>
+          <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7B1FA2" />
+            <stop offset="100%" stop-color="#E91E63" />
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="65" cy="65" r="60"></circle>
+        <circle class="ring-fill" id="scoreRing" cx="65" cy="65" r="60"></circle>
+      </svg>
+      <div class="score-text">
+        <div class="num" id="scoreNum">0</div>
+        <div class="label">Safety Score</div>
+      </div>
+    </div>
+    <div class="score-info">
+      <h3>🛡️ Your Safety Score</h3>
+      <p id="scoreMessage">Complete the checklist below to reach 100%.</p>
+      <a href="contacts.html" class="tip" id="scoreTip">👉 Add your first emergency contact</a>
+    </div>
+  </div>
+
+  <!-- ============ TRUST BADGES ============ -->
+  <div class="trust-badges">
+    <div class="trust-badge">
+      <div class="tb-icon">🔒</div>
+      <div class="tb-title">100% Private</div>
+      <div class="tb-sub">No server uploads</div>
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">⚡</div>
+      <div class="tb-title">Instant Alerts</div>
+      <div class="tb-sub">Under 5 seconds</div>
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">📍</div>
+      <div class="tb-title">GPS Precise</div>
+      <div class="tb-sub">Live tracking</div>
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">🆓</div>
+      <div class="tb-title">Free Forever</div>
+      <div class="tb-sub">No hidden charges</div>
+    </div>
+  </div>
+
+  <!-- ============ SETUP CHECKLIST ============ -->
+  <div class="checklist">
+    <h3>📋 Complete Your Setup</h3>
+    <p class="cl-sub">Finish these steps to reach 100% safety score</p>
+
+    <a href="profile.html" class="check-item" id="chkProfile">
+      <div class="check-box">✓</div>
+      <div class="check-text">
+        <strong>Fill your profile</strong>
+        <small>Add your name, phone and address</small>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="contacts.html" class="check-item" id="chkContacts">
+      <div class="check-box">✓</div>
+      <div class="check-text">
+        <strong>Add 3+ emergency contacts</strong>
+        <small>Family, friends, or neighbors who can help</small>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="location.html" class="check-item" id="chkLocation">
+      <div class="check-box">✓</div>
+      <div class="check-text">
+        <strong>Enable location sharing</strong>
+        <small>Allow GPS for accurate SOS alerts</small>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="dashboard.html" class="check-item" id="chkSOS">
+      <div class="check-box">✓</div>
+      <div class="check-text">
+        <strong>Test the SOS button</strong>
+        <small>Try it once so you're ready when needed</small>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ============ SOS ============ -->
+  <h2 class="dash-title">🚨 Emergency SOS</h2>
 
   <div class="sos-wrap">
     <button class="sos-btn" id="sosBtn" onclick="startSOS()">SOS</button>
@@ -29,7 +570,8 @@
     </p>
   </div>
 
-  <h2 style="color:var(--primary);text-align:center;margin-top:50px">⚡ Quick Helplines</h2>
+  <!-- ============ QUICK HELPLINES ============ -->
+  <h2 class="dash-title">⚡ Quick Helplines</h2>
   <div class="grid" style="margin-top:20px">
     <a class="helpline" href="tel:1091"><div class="icon">📞</div><strong>Police</strong><div class="num">1091</div></a>
     <a class="helpline" href="tel:181"><div class="icon">🆘</div><strong>Women Helpline</strong><div class="num">181</div></a>
@@ -37,12 +579,71 @@
     <a class="helpline" href="tel:1098"><div class="icon">👶</div><strong>Child Helpline</strong><div class="num">1098</div></a>
   </div>
 
-  <h2 style="color:var(--primary);margin-top:50px">📊 Your Safety Snapshot</h2>
+  <!-- ============ QUICK STATS ============ -->
+  <h2 class="dash-title">📊 Your Safety Snapshot</h2>
   <div class="grid" style="margin-top:20px">
     <div class="card"><div style="font-size:40px">👥</div><h3 id="contactCount">0</h3><p>Emergency Contacts</p></div>
     <div class="card"><div style="font-size:40px">📜</div><h3 id="alertCount">0</h3><p>Total Alerts Sent</p></div>
     <div class="card"><div style="font-size:40px">✅</div><h3 id="resolvedCount">0</h3><p>Resolved Alerts</p></div>
   </div>
+
+  <!-- ============ HOW SAFEHER PROTECTS YOU ============ -->
+  <h2 class="dash-title">🛡️ How SafeHer Protects You</h2>
+  <div class="protect-row">
+    <div class="protect-card">
+      <div class="pc-icon">⚡</div>
+      <h4>Instant Response</h4>
+      <p>Your SOS is logged instantly with GPS and timestamped for evidence.</p>
+    </div>
+    <div class="protect-card">
+      <div class="pc-icon">🔐</div>
+      <h4>Encrypted Locally</h4>
+      <p>All data stays in your browser — no one else can ever see it.</p>
+    </div>
+    <div class="protect-card">
+      <div class="pc-icon">📱</div>
+      <h4>Works Offline</h4>
+      <p>The app loads instantly even on a slow network. SOS stays available.</p>
+    </div>
+    <div class="protect-card">
+      <div class="pc-icon">🆘</div>
+      <h4>Direct Helplines</h4>
+      <p>One tap dials the national emergency numbers — no searching needed.</p>
+    </div>
+  </div>
+
+  <!-- ============ RECENT ACTIVITY ============ -->
+  <h2 class="dash-title">📰 Recent Activity</h2>
+  <div class="activity">
+    <div id="activityList">
+      <div class="activity-empty">No activity yet. Start by adding a contact or testing SOS.</div>
+    </div>
+  </div>
+
+  <!-- ============ PRIVACY PROMISE ============ -->
+  <div class="privacy-card">
+    <h3>🔒 Our Privacy Promise</h3>
+    <p>Your safety app should never compromise your privacy. Here's our commitment:</p>
+    <ul>
+      <li>✅ <strong>Zero tracking</strong> — we don't log your movements</li>
+      <li>✅ <strong>Zero uploads</strong> — nothing leaves your device</li>
+      <li>✅ <strong>Zero ads</strong> — no third-party tracking scripts</li>
+      <li>✅ <strong>Zero cost</strong> — free forever, for everyone</li>
+      <li>✅ <strong>Open source</strong> — code visible on GitHub</li>
+    </ul>
+  </div>
+
+  <!-- ============ EMERGENCY CARD ============ -->
+  <div class="emergency-card">
+    <h3>🆘 In Immediate Danger?</h3>
+    <p>Don't hesitate. Call for help right now — every second matters.</p>
+    <div class="emergency-actions">
+      <a href="tel:112">📞 Call 112</a>
+      <a href="tel:181">🆘 Women Helpline 181</a>
+      <button onclick="window.print()">🖨️ Print Emergency Info</button>
+    </div>
+  </div>
+
 </div>
 
 <div id="footer-placeholder"></div>
@@ -56,14 +657,168 @@
     const user = DB.getUser();
     if (user) document.getElementById('welcome').textContent = `Welcome, ${user.fullName} 👋`;
     refreshStats();
+    updateChecklist();
+    updateSafetyScore();
+    renderActivity();
   })();
 
+  /* ============ Stats ============ */
   function refreshStats() {
     document.getElementById('contactCount').textContent = DB.getContacts().length;
     const alerts = DB.getAlerts();
     document.getElementById('alertCount').textContent = alerts.length;
     document.getElementById('resolvedCount').textContent =
       alerts.filter(a => a.status === 'RESOLVED').length;
+  }
+
+  /* ============ Checklist ============ */
+  function updateChecklist() {
+    const user = DB.getUser() || {};
+    const contacts = DB.getContacts();
+    const alerts = DB.getAlerts();
+
+    if (user.fullName && user.phoneNumber) {
+      document.getElementById('chkProfile')?.classList.add('done');
+    }
+    if (contacts.length >= 3) {
+      document.getElementById('chkContacts')?.classList.add('done');
+    }
+    if (localStorage.getItem('locationEnabled') === 'true') {
+      document.getElementById('chkLocation')?.classList.add('done');
+    }
+    if (alerts.length > 0) {
+      document.getElementById('chkSOS')?.classList.add('done');
+    }
+  }
+
+  /* ============ Safety Score ============ */
+  function calculateScore() {
+    const user = DB.getUser() || {};
+    const contacts = DB.getContacts();
+    const alerts = DB.getAlerts();
+
+    let score = 0;
+    // Profile complete (up to 25)
+    if (user.fullName) score += 8;
+    if (user.email) score += 8;
+    if (user.phoneNumber) score += 9;
+
+    // Contacts (up to 35)
+    score += Math.min(35, contacts.length * 12);
+
+    // Location enabled (20)
+    if (localStorage.getItem('locationEnabled') === 'true') score += 20;
+
+    // SOS tested (20)
+    if (alerts.length > 0) score += 20;
+
+    return Math.min(100, Math.round(score));
+  }
+
+  function updateSafetyScore() {
+    const score = calculateScore();
+    const ring = document.getElementById('scoreRing');
+    const num = document.getElementById('scoreNum');
+    const msg = document.getElementById('scoreMessage');
+    const tip = document.getElementById('scoreTip');
+
+    // Animate ring (circumference = 2 * PI * r = ~377)
+    const offset = 377 - (377 * score / 100);
+    setTimeout(() => ring.style.strokeDashoffset = offset, 200);
+
+    // Animate number
+    let current = 0;
+    const step = score / 40;
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= score) {
+        num.textContent = score;
+        clearInterval(interval);
+      } else {
+        num.textContent = Math.floor(current);
+      }
+    }, 30);
+
+    // Message + tip
+    if (score >= 90) {
+      msg.textContent = '🎉 Excellent! Your account is fully protected.';
+      tip.style.display = 'none';
+    } else if (score >= 60) {
+      msg.textContent = '👍 Good progress! A few steps left to be fully protected.';
+      tip.textContent = '👉 Complete the checklist above';
+      tip.href = '#';
+    } else if (score >= 30) {
+      msg.textContent = '⚠️ You\'re getting started. Complete more steps for full protection.';
+      tip.textContent = '👉 Add more emergency contacts';
+      tip.href = 'contacts.html';
+    } else {
+      msg.textContent = '🚨 Your account needs setup. Complete the checklist below.';
+      tip.textContent = '👉 Fill your profile first';
+      tip.href = 'profile.html';
+    }
+  }
+
+  /* ============ Activity Feed ============ */
+  function renderActivity() {
+    const user = DB.getUser() || {};
+    const contacts = DB.getContacts();
+    const alerts = DB.getAlerts();
+    const list = document.getElementById('activityList');
+
+    const items = [];
+
+    // Profile created
+    if (user.fullName) {
+      items.push({
+        icon: '👤',
+        text: 'Account created',
+        time: 'Just now',
+        sort: Date.now() - 100
+      });
+    }
+
+    // Contacts added
+    contacts.slice(-3).forEach(c => {
+      items.push({
+        icon: '👥',
+        text: `Added ${c.name} as emergency contact`,
+        time: 'Recent',
+        sort: c.id
+      });
+    });
+
+    // Alerts
+    alerts.slice(0, 3).forEach(a => {
+      items.push({
+        icon: a.status === 'RESOLVED' ? '✅' : '🚨',
+        text: a.status === 'RESOLVED' ? 'Alert resolved' : 'SOS alert triggered',
+        time: new Date(a.createdAt).toLocaleString(),
+        sort: a.id
+      });
+    });
+
+    if (items.length === 0) {
+      list.innerHTML = '<div class="activity-empty">No activity yet. Start by adding a contact or testing SOS.</div>';
+      return;
+    }
+
+    items.sort((a, b) => b.sort - a.sort);
+    list.innerHTML = items.slice(0, 6).map(i => `
+      <div class="activity-item">
+        <div class="ai-icon">${i.icon}</div>
+        <div class="ai-content">
+          <strong>${i.text}</strong>
+          <small>${i.time}</small>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ============ Track location enabled ============ */
+  // When user visits location page and gets location, we mark this
+  // (Already handled in location.html - just leaving hook here for demo)
+  if (!localStorage.getItem('locationEnabled')) {
+    localStorage.setItem('locationEnabled', 'false');
   }
 </script>
 </body>
