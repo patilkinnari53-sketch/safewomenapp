@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency Contacts — SafeHer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
+  </script>
+  <style>.dark-loading body { background: #121212; }</style>
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page">
+  <h1>👥 Emergency Contacts</h1>
+  <p class="subtitle">These people will be alerted when you press SOS.</p>
+
+  <div class="form-box" style="margin:0 auto 40px">
+    <h2>➕ Add New Contact</h2>
+    <div class="form-group"><label>Full Name *</label><input id="cName" placeholder="e.g. Mom" /></div>
+    <div class="form-group"><label>Phone Number *</label><input id="cPhone" placeholder="+91 98765 43210" /></div>
+    <div class="form-group"><label>Relationship</label><input id="cRel" placeholder="e.g. Mother, Friend, Sister" /></div>
+    <div class="form-group"><label>Email (optional)</label><input id="cEmail" type="email" placeholder="optional@email.com" /></div>
+    <button class="btn-primary" onclick="addContact()">Add Contact</button>
+  </div>
+
+  <h2 style="color:var(--primary)">Your Contacts (<span id="count">0</span>)</h2>
+  <div id="list" style="margin-top:20px"></div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div class="toast" id="toast"></div>
+
+<script src="theme.js"></script>
+<script>
+  if (!guardAuth()) { /* redirected */ }
+
+  (function init() { render(); })();
+
+  function addContact() {
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const rel = document.getElementById('cRel').value.trim();
+    const email = document.getElementById('cEmail').value.trim();
+    if (!name || !phone) return toast('Name and phone are required');
+
+    const contacts = DB.getContacts();
+    contacts.push({ id: Date.now(), name, phoneNumber: phone, relationship: rel, email });
+    DB.setContacts(contacts);
+    ['cName','cPhone','cRel','cEmail'].forEach(id => document.getElementById(id).value = '');
+    toast('✅ Contact added');
+    render();
+  }
+
+  function render() {
+    const contacts = DB.getContacts();
+    document.getElementById('count').textContent = contacts.length;
+    const list = document.getElementById('list');
+    if (contacts.length === 0) {
+      list.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:30px">No contacts yet. Add your first one above. 👆</p>';
+      return;
+    }
+    list.innerHTML = contacts.map(c => `
+      <div class="contact-item">
+        <div>
+          <strong>${c.name}</strong>
+          <div class="meta">📞 ${c.phoneNumber}${c.relationship ? ' • ' + c.relationship : ''}</div>
+          ${c.email ? `<div class="meta">📧 ${c.email}</div>` : ''}
+        </div>
+        <button class="btn-delete" onclick="removeContact(${c.id})">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  function removeContact(id) {
+    if (!confirm('Remove this contact?')) return;
+    DB.setContacts(DB.getContacts().filter(c => c.id !== id));
+    toast('Contact removed');
+    render();
+  }
+</script>
+</body>
+</html>
