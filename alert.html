@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alert History — SafeHer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
+  </script>
+  <style>.dark-loading body { background: #121212; }</style>
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page">
+  <h1>📜 Alert History</h1>
+  <p class="subtitle">All your past SOS alerts. Click "Mark Resolved" once you're safe.</p>
+  <div id="list"></div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div class="toast" id="toast"></div>
+
+<script src="theme.js"></script>
+<script>
+  if (!guardAuth()) { /* redirected */ }
+
+  (function init() { render(); })();
+
+  function render() {
+    const alerts = DB.getAlerts();
+    const list = document.getElementById('list');
+
+    if (alerts.length === 0) {
+      list.innerHTML = `
+        <div class="card" style="padding:50px;text-align:center">
+          <div style="font-size:60px">✅</div>
+          <h3 style="color:var(--primary)">No alerts yet</h3>
+          <p>You haven't triggered any SOS alerts. Stay safe!</p>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = alerts.map(a => `
+      <div class="alert-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <div>
+            <span class="badge ${a.status.toLowerCase()}">${a.status}</span>
+            <span style="color:var(--text-dim);font-size:13px;margin-left:10px">
+              ${new Date(a.createdAt).toLocaleString()}
+            </span>
+          </div>
+          ${a.status === 'ACTIVE' ?
+            `<button class="btn-delete" style="background:#28a745" onclick="resolve(${a.id})">✅ Mark Resolved</button>` :
+            ''}
+        </div>
+        <p style="margin-top:12px">${a.message}</p>
+        ${a.lat ? `
+          <a href="https://www.google.com/maps?q=${a.lat},${a.lng}" target="_blank"
+            style="color:var(--primary);font-size:14px;text-decoration:none">
+            📍 View location on map
+          </a>
+        ` : ''}
+      </div>
+    `).join('');
+  }
+
+  function resolve(id) {
+    const alerts = DB.getAlerts().map(a =>
+      a.id === id ? { ...a, status: 'RESOLVED' } : a);
+    DB.setAlerts(alerts);
+    toast('✅ Marked resolved');
+    render();
+  }
+</script>
+</body>
+</html>
