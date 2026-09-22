@@ -1,41 +1,49 @@
 /* ============ SafeHer — Global Theme + Header/Footer Loader ============ */
 
-// Apply theme BEFORE page renders (avoid flash)
 (function applyStoredTheme() {
   const saved = localStorage.getItem('theme') || 'light';
   if (saved === 'dark') document.documentElement.classList.add('dark-loading');
 })();
 
-/* ============ Load Header & Footer Dynamically ============ */
+/* ============ Cache-busting fetch ============ */
+async function fetchFresh(url) {
+  // Add timestamp so browser never uses cached version
+  const sep = url.includes('?') ? '&' : '?';
+  const fresh = `${url}${sep}v=${Date.now()}`;
+  const res = await fetch(fresh, { cache: 'no-store' });
+  return await res.text();
+}
+
+/* ============ Load Header & Footer ============ */
 async function loadPartials() {
   const navContainer = document.getElementById('nav-placeholder');
   const footerContainer = document.getElementById('footer-placeholder');
 
   try {
     if (navContainer) {
-      const res = await fetch('header.html');
-      navContainer.innerHTML = await res.text();
+      navContainer.innerHTML = await fetchFresh('header.html');
     }
   } catch (e) {
-    console.error('Failed to load header:', e);
+    console.error('❌ Failed to load header.html:', e);
+    if (navContainer) navContainer.innerHTML = '<p style="padding:14px;text-align:center;color:#E91E63">Header failed to load</p>';
   }
 
   try {
     if (footerContainer) {
-      const res = await fetch('footer.html');
-      footerContainer.innerHTML = await res.text();
-      // Re-run inline scripts in footer (for year)
+      footerContainer.innerHTML = await fetchFresh('footer.html');
+      // Re-run inline scripts inside footer
       footerContainer.querySelectorAll('script').forEach(oldScript => {
         const newScript = document.createElement('script');
-        newScript.textContent = oldScript.textContent;
+        if (oldScript.src) newScript.src = oldScript.src;
+        else newScript.textContent = oldScript.textContent;
         document.body.appendChild(newScript);
       });
     }
   } catch (e) {
-    console.error('Failed to load footer:', e);
+    console.error('❌ Failed to load footer.html:', e);
+    if (footerContainer) footerContainer.innerHTML = '<p style="padding:14px;text-align:center;color:#E91E63">Footer failed to load</p>';
   }
 
-  // After partials loaded, apply the rest
   applyThemeAndSetup();
 }
 
@@ -50,13 +58,13 @@ function applyThemeAndSetup() {
   renderAuthLink();
   createParticles();
   attachPageTransition();
+  attachBackToTop();
 
-  // Set year directly too (as fallback)
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
 }
 
-/* ============ Highlight Current Page in Navbar ============ */
+/* ============ Highlight Current Page ============ */
 function highlightActiveLink() {
   const path = location.pathname.split('/').pop() || 'index.html';
   const map = {
@@ -76,32 +84,32 @@ function highlightActiveLink() {
   });
 }
 
-/* ============ Floating Particles ============ */
+/* ============ Particles ============ */
 function createParticles() {
-  const count = 12;
-  for (let i = 0; i < count; i++) {
+  if (document.querySelectorAll('.particle').length > 0) return;
+  for (let i = 0; i < 12; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     const size = Math.random() * 12 + 4;
     p.style.width = size + 'px';
     p.style.height = size + 'px';
     p.style.left = Math.random() * 100 + 'vw';
-    p.style.background = i % 2 === 0
-      ? 'rgba(123,31,162,0.35)' : 'rgba(233,30,99,0.35)';
+    p.style.background = i % 2 === 0 ? 'rgba(123,31,162,0.35)' : 'rgba(233,30,99,0.35)';
     p.style.animationDuration = (Math.random() * 20 + 20) + 's';
     p.style.animationDelay = (Math.random() * 15) + 's';
     document.body.appendChild(p);
   }
 }
 
-/* ============ Smooth Page Transition ============ */
+/* ============ Page Transition ============ */
 function attachPageTransition() {
   document.querySelectorAll('a[href$=".html"]').forEach(a => {
     if (a._transitionBound) return;
     a._transitionBound = true;
     a.addEventListener('click', (e) => {
       const href = a.getAttribute('href');
-      if (!href || href.startsWith('http') || href.startsWith('#') || href === 'header.html' || href === 'footer.html') return;
+      if (!href || href.startsWith('http') || href.startsWith('#')
+        || href === 'header.html' || href === 'footer.html') return;
       e.preventDefault();
       document.querySelector('.page')?.classList.add('page-exit');
       document.body.style.transition = 'opacity 0.3s';
@@ -111,23 +119,37 @@ function attachPageTransition() {
   });
 }
 
-/* ============ Theme Toggle ============ */
+/* ============ Back-to-Top Button (auto-wire) ============ */
+function attachBackToTop() {
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+
+  const toggle = () => {
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  };
+  window.removeEventListener('scroll', toggle);
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+
+  btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============ Theme ============ */
 function toggleTheme() {
   const isDark = document.body.classList.toggle('dark');
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
   updateThemeButton();
   toast(isDark ? '🌙 Dark mode' : '☀️ Light mode');
 }
-
 function updateThemeButton() {
   const btn = document.getElementById('themeBtn');
   if (!btn) return;
   const isDark = document.body.classList.contains('dark');
   btn.textContent = isDark ? '☀️' : '🌙';
-  btn.title = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
 }
 
-/* ============ Local Storage DB ============ */
+/* ============ DB ============ */
 const DB = {
   getUser: () => JSON.parse(localStorage.getItem('user') || 'null'),
   setUser: (u) => localStorage.setItem('user', JSON.stringify(u)),
@@ -152,20 +174,16 @@ function toast(msg) {
   t._timer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-/* ============ Auth Guard ============ */
+/* ============ Auth ============ */
 function guardAuth(redirect = 'login.html') {
   if (!DB.getUser()) { location.href = redirect; return false; }
   return true;
 }
-
-/* ============ Logout ============ */
 function logout() {
   DB.logout();
   toast('Logged out');
   setTimeout(() => location.href = 'index.html', 700);
 }
-
-/* ============ Auth Link in Navbar ============ */
 function renderAuthLink() {
   const el = document.getElementById('authLink');
   if (!el) return;
@@ -176,7 +194,7 @@ function renderAuthLink() {
   }
 }
 
-/* ============ SOS with Countdown ============ */
+/* ============ SOS ============ */
 let sosTimer = null;
 let sosCountdownValue = 5;
 
@@ -261,7 +279,7 @@ function sendSOSAlert() {
   );
 }
 
-/* ============ Auto-Load Partials on DOM Ready ============ */
+/* ============ Boot ============ */
 document.addEventListener('DOMContentLoaded', () => {
   loadPartials();
 });
