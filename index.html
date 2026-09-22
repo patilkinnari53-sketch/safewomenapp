@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home — SafeHer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
+  </script>
+  <style>.dark-loading body { background: #121212; }</style>
+</head>
+<body>
+
+<!-- Navbar will be injected here -->
+<div id="nav-placeholder"></div>
+
+<div class="page">
+  <div class="hero">
+    <h1>Your Safety, Our Priority 🛡️</h1>
+    <p>Instant SOS alerts, live location sharing, and trusted contacts — all in one place.</p>
+    <a href="register.html" class="btn">Get Started</a>
+  </div>
+
+  <h2 style="color:var(--primary);text-align:center;margin-bottom:10px">Why Choose SafeHer?</h2>
+  <p class="subtitle" style="text-align:center">Everything you need to feel safe, in one app.</p>
+
+  <div class="grid">
+    <div class="card"><div style="font-size:44px">🚨</div><h3>One-Tap SOS</h3><p>Send an emergency alert to all contacts instantly with your live location.</p></div>
+    <div class="card"><div style="font-size:44px">📍</div><h3>Live Location</h3><p>Share real-time GPS coordinates with the people you trust.</p></div>
+    <div class="card"><div style="font-size:44px">👥</div><h3>Trusted Contacts</h3><p>Manage your emergency circle — family, friends, neighbors.</p></div>
+    <div class="card"><div style="font-size:44px">🆘</div><h3>24/7 Helplines</h3><p>Direct dial to national helplines with one tap.</p></div>
+    <div class="card"><div style="font-size:44px">📜</div><h3>Alert History</h3><p>Every SOS you trigger is logged for review.</p></div>
+    <div class="card"><div style="font-size:44px">🌗</div><h3>Dark Mode</h3><p>Comfortable viewing any time, day or night.</p></div>
+  </div>
+</div>
+
+<!-- Footer will be injected here -->
+<div id="footer-placeholder"></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="theme.js"></script>
+</body>
+</html>
