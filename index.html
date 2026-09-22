@@ -8,38 +8,742 @@
   <script>
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
   </script>
-  <style>.dark-loading body { background: #121212; }</style>
+  <style>
+    .dark-loading body { background: #121212; }
+
+    /* ---- HOME-PAGE-SPECIFIC STYLES ---- */
+
+    /* Typing animation */
+    .typing-wrap {
+      display: inline-block;
+      min-height: 55px;
+    }
+    .typing {
+      border-right: 3px solid #ffb3c1;
+      padding-right: 6px;
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { border-color: #ffb3c1; }
+      51%, 100% { border-color: transparent; }
+    }
+
+    /* Stats band */
+    .stats-band {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin: 50px 0;
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 25px var(--shadow);
+      animation: fadeSlideIn 0.8s ease;
+    }
+    .stat-box { text-align: center; padding: 15px; }
+    .stat-box .stat-num {
+      font-size: 42px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #7B1FA2, #E91E63);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+    body.dark .stat-box .stat-num {
+      background: linear-gradient(135deg, #b968d6, #ff4d6d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-box .stat-label {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Clickable feature cards */
+    a.card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    a.card-link .card {
+      cursor: pointer;
+      position: relative;
+    }
+    a.card-link .card::after {
+      content: '→';
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      font-size: 20px;
+      color: var(--primary);
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s;
+    }
+    a.card-link:hover .card::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* How it works — steps */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+      counter-reset: stepCounter;
+    }
+    .step {
+      background: var(--card-bg);
+      padding: 30px 22px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 15px var(--shadow);
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: cardEnter 0.6s ease backwards;
+    }
+    .step:nth-child(1) { animation-delay: 0.05s; }
+    .step:nth-child(2) { animation-delay: 0.15s; }
+    .step:nth-child(3) { animation-delay: 0.25s; }
+    .step:nth-child(4) { animation-delay: 0.35s; }
+    .step:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px var(--shadow-strong);
+    }
+    .step .num {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #7B1FA2, #E91E63);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(123,31,162,0.4);
+    }
+    .step .icon-big { font-size: 46px; margin: 10px 0 12px; }
+    .step h3 { color: var(--primary); margin-bottom: 8px; }
+    .step p { color: var(--text-muted); font-size: 15px; }
+
+    /* Self-defense section */
+    .defense-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      margin-top: 30px;
+    }
+    .defense-card {
+      background: var(--card-bg);
+      padding: 26px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px var(--shadow);
+      border-left: 5px solid var(--accent);
+      transition: all 0.4s ease;
+      animation: slideInLeft 0.6s ease backwards;
+      position: relative;
+      overflow: hidden;
+    }
+    .defense-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle, rgba(233,30,99,0.15), transparent 70%);
+      border-radius: 50%;
+      transform: translate(30%, -30%);
+    }
+    .defense-card:nth-child(1) { animation-delay: 0.05s; }
+    .defense-card:nth-child(2) { animation-delay: 0.1s; }
+    .defense-card:nth-child(3) { animation-delay: 0.15s; }
+    .defense-card:nth-child(4) { animation-delay: 0.2s; }
+    .defense-card:nth-child(5) { animation-delay: 0.25s; }
+    .defense-card:nth-child(6) { animation-delay: 0.3s; }
+    .defense-card:hover {
+      transform: translateX(8px) scale(1.02);
+      border-left-color: var(--primary);
+      box-shadow: 0 10px 25px var(--shadow-strong);
+    }
+    .defense-card .def-icon {
+      font-size: 36px;
+      display: inline-block;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .defense-card h3 {
+      color: var(--primary);
+      margin: 12px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .defense-card ol {
+      padding-left: 20px;
+      color: var(--text-muted);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+    .defense-card ol li { margin-bottom: 4px; }
+
+    /* Testimonials */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      margin-top: 30px;
+    }
+    .testimonial {
+      background: var(--card-bg);
+      padding: 26px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px var(--shadow);
+      position: relative;
+      animation: fadeSlideIn 0.7s ease backwards;
+      transition: all 0.3s ease;
+    }
+    .testimonial:nth-child(1) { animation-delay: 0.1s; }
+    .testimonial:nth-child(2) { animation-delay: 0.2s; }
+    .testimonial:nth-child(3) { animation-delay: 0.3s; }
+    .testimonial:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px var(--shadow-strong);
+    }
+    .testimonial::before {
+      content: '"';
+      position: absolute;
+      top: 10px; left: 18px;
+      font-size: 60px;
+      color: var(--primary);
+      opacity: 0.2;
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+    .testimonial p {
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 12px 0 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial .author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial .avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7B1FA2, #E91E63);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .testimonial .author strong { color: var(--text); font-size: 15px; }
+    .testimonial .author small { color: var(--text-dim); display: block; font-size: 13px; }
+
+    /* FAQ */
+    .faq { margin-top: 30px; }
+    .faq-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px var(--shadow);
+      overflow: hidden;
+      animation: fadeSlideIn 0.6s ease backwards;
+    }
+    .faq-item:nth-child(1) { animation-delay: 0.05s; }
+    .faq-item:nth-child(2) { animation-delay: 0.1s; }
+    .faq-item:nth-child(3) { animation-delay: 0.15s; }
+    .faq-item:nth-child(4) { animation-delay: 0.2s; }
+    .faq-q {
+      padding: 18px 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: var(--text);
+      transition: background 0.3s;
+    }
+    .faq-q:hover { background: rgba(123,31,162,0.05); }
+    .faq-q .arrow {
+      transition: transform 0.3s;
+      color: var(--primary);
+      font-size: 20px;
+    }
+    .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 22px;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .faq-item.open .faq-a {
+      max-height: 300px;
+      padding: 0 22px 20px;
+    }
+
+    /* CTA section */
+    .cta-section {
+      text-align: center;
+      padding: 60px 30px;
+      margin: 60px 0 20px;
+      background: linear-gradient(135deg, #7B1FA2, #E91E63);
+      background-size: 200% 200%;
+      animation: gradientFlow 8s ease infinite;
+      border-radius: 18px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 60%);
+      animation: shimmer 3s infinite;
+    }
+    .cta-section h2 {
+      font-size: 34px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .cta-section p {
+      font-size: 17px;
+      margin-bottom: 26px;
+      position: relative;
+      opacity: 0.95;
+    }
+    .cta-section .cta-btn {
+      display: inline-block;
+      background: white;
+      color: #7B1FA2;
+      padding: 14px 40px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 17px;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .cta-section .cta-btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+    }
+
+    /* Section headers */
+    .section-title {
+      text-align: center;
+      margin: 60px 0 10px;
+      color: var(--primary);
+      font-size: 28px;
+      animation: fadeSlideIn 0.7s ease;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      animation: fadeSlideIn 0.7s ease 0.1s backwards;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Navbar will be injected here -->
 <div id="nav-placeholder"></div>
 
 <div class="page">
+
+  <!-- ============ HERO ============ -->
   <div class="hero">
-    <h1>Your Safety, Our Priority 🛡️</h1>
-    <p>Instant SOS alerts, live location sharing, and trusted contacts — all in one place.</p>
-    <a href="register.html" class="btn">Get Started</a>
+    <h1>Your Safety, <span class="typing-wrap"><span class="typing" id="typingText">Our Priority</span></span> 🛡️</h1>
+    <p>Instant SOS alerts, live location sharing, trusted contacts, and self-defense guides — all in one place.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative">
+      <a href="register.html" class="btn">Get Started Free</a>
+      <a href="dashboard.html" class="btn" style="background:transparent;color:white;border:2px solid white">Try SOS Demo</a>
+    </div>
   </div>
 
-  <h2 style="color:var(--primary);text-align:center;margin-bottom:10px">Why Choose SafeHer?</h2>
-  <p class="subtitle" style="text-align:center">Everything you need to feel safe, in one app.</p>
+  <!-- ============ STATS BAND ============ -->
+  <div class="stats-band">
+    <div class="stat-box">
+      <div class="stat-num" data-count="50000">0</div>
+      <div class="stat-label">Women Protected</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" data-count="12000">0</div>
+      <div class="stat-label">Alerts Sent</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" data-count="98">0</div>
+      <div class="stat-label">% Response Rate</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" data-count="24">0</div>
+      <div class="stat-label">/7 Availability</div>
+    </div>
+  </div>
+
+  <!-- ============ FEATURES (Clickable) ============ -->
+  <h2 class="section-title">✨ Everything You Need</h2>
+  <p class="section-sub">Tap any card to explore that feature</p>
 
   <div class="grid">
-    <div class="card"><div style="font-size:44px">🚨</div><h3>One-Tap SOS</h3><p>Send an emergency alert to all contacts instantly with your live location.</p></div>
-    <div class="card"><div style="font-size:44px">📍</div><h3>Live Location</h3><p>Share real-time GPS coordinates with the people you trust.</p></div>
-    <div class="card"><div style="font-size:44px">👥</div><h3>Trusted Contacts</h3><p>Manage your emergency circle — family, friends, neighbors.</p></div>
-    <div class="card"><div style="font-size:44px">🆘</div><h3>24/7 Helplines</h3><p>Direct dial to national helplines with one tap.</p></div>
-    <div class="card"><div style="font-size:44px">📜</div><h3>Alert History</h3><p>Every SOS you trigger is logged for review.</p></div>
-    <div class="card"><div style="font-size:44px">🌗</div><h3>Dark Mode</h3><p>Comfortable viewing any time, day or night.</p></div>
+    <a href="dashboard.html" class="card-link">
+      <div class="card">
+        <div style="font-size:44px">🚨</div>
+        <h3>One-Tap SOS</h3>
+        <p>Send an emergency alert to all contacts instantly with your live location.</p>
+      </div>
+    </a>
+
+    <a href="location.html" class="card-link">
+      <div class="card">
+        <div style="font-size:44px">📍</div>
+        <h3>Live Location</h3>
+        <p>Share real-time GPS coordinates with the people you trust most.</p>
+      </div>
+    </a>
+
+    <a href="contacts.html" class="card-link">
+      <div class="card">
+        <div style="font-size:44px">👥</div>
+        <h3>Trusted Contacts</h3>
+        <p>Manage your emergency circle — family, friends, or neighbors.</p>
+      </div>
+    </a>
+
+    <a href="tips.html" class="card-link">
+      <div class="card">
+        <div style="font-size:44px">🆘</div>
+        <h3>24/7 Helplines</h3>
+        <p>Direct dial to national emergency helplines with one tap.</p>
+      </div>
+    </a>
+
+    <a href="alerts.html" class="card-link">
+      <div class="card">
+        <div style="font-size:44px">📜</div>
+        <h3>Alert History</h3>
+        <p>Every SOS you trigger is logged so you can review it later.</p>
+      </div>
+    </a>
+
+    <a href="profile.html" class="card-link">
+      <div class="card">
+        <div style="font-size:44px">👤</div>
+        <h3>Your Profile</h3>
+        <p>Manage personal details, emergency info, and preferences.</p>
+      </div>
+    </a>
   </div>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <h2 class="section-title">🚀 How It Works</h2>
+  <p class="section-sub">Get protected in 4 simple steps</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <div class="icon-big">📝</div>
+      <h3>Sign Up</h3>
+      <p>Create your free account in seconds. No credit card needed.</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="icon-big">👥</div>
+      <h3>Add Contacts</h3>
+      <p>Add trusted family & friends who will receive your alerts.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="icon-big">🚨</div>
+      <h3>Tap SOS</h3>
+      <p>In an emergency, one tap sends your location to all contacts.</p>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div class="icon-big">✅</div>
+      <h3>Stay Safe</h3>
+      <p>Your trusted circle is alerted immediately. Help is on the way.</p>
+    </div>
+  </div>
+
+  <!-- ============ SELF-DEFENSE ============ -->
+  <h2 class="section-title">🥋 Self-Defense Basics</h2>
+  <p class="section-sub">Simple, effective techniques every woman should know</p>
+
+  <div class="defense-grid">
+    <div class="defense-card">
+      <div class="def-icon">✋</div>
+      <h3>Palm Strike</h3>
+      <ol>
+        <li>Keep your fingers together and hand flat</li>
+        <li>Aim for the attacker's nose or chin</li>
+        <li>Strike upward with the heel of your palm</li>
+        <li>Immediately step back and shout for help</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-icon">🦵</div>
+      <h3>Knee Strike</h3>
+      <ol>
+        <li>Grab the attacker's shoulders or arms</li>
+        <li>Pull them down while raising your knee</li>
+        <li>Strike their groin or thigh hard</li>
+        <li>Run to a crowded, well-lit place</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-icon">👊</div>
+      <h3>Elbow Strike</h3>
+      <ol>
+        <li>Keep your elbow bent at 90°</li>
+        <li>Swing it backward into their ribs or chest</li>
+        <li>Best used when grabbed from behind</li>
+        <li>Follow with a swift escape</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-icon">🖐️</div>
+      <h3>Wrist Release</h3>
+      <ol>
+        <li>Rotate your wrist toward the attacker's thumb</li>
+        <li>Pull sharply in the direction of their thumb</li>
+        <li>Use your other hand to push their arm away</li>
+        <li>Move quickly away from the attacker</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-icon">🎯</div>
+      <h3>Target Vulnerable Spots</h3>
+      <ol>
+        <li>Eyes — poke with fingers</li>
+        <li>Nose — palm strike upward</li>
+        <li>Groin — knee or kick</li>
+        <li>Shins — kick with heel</li>
+        <li>Throat — chop with side of hand</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-icon">🆘</div>
+      <h3>Escape & Alert</h3>
+      <ol>
+        <li>Shout "FIRE!" loudly — gets more attention</li>
+        <li>Break free and run toward crowds</li>
+        <li>Enter any open shop or public place</li>
+        <li>Call 112 or 1091 immediately</li>
+        <li>Use SafeHer SOS to alert your contacts</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <h2 class="section-title">💬 What Women Say</h2>
+  <p class="section-sub">Real stories from real users</p>
+
+  <div class="testimonials">
+    <div class="testimonial">
+      <p>SafeHer gave me confidence to travel alone for work. My family can track my location and I feel much safer.</p>
+      <div class="author">
+        <div class="avatar">P</div>
+        <div>
+          <strong>Priya S.</strong>
+          <small>Working Professional, Bangalore</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <p>The SOS button saved me during a scary late-night cab ride. My mom was alerted in seconds.</p>
+      <div class="author">
+        <div class="avatar">A</div>
+        <div>
+          <strong>Ananya M.</strong>
+          <small>Student, Delhi</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <p>Simple, fast, and it just works. The self-defense guide is a bonus I didn't know I needed.</p>
+      <div class="author">
+        <div class="avatar">R</div>
+        <div>
+          <strong>Riya K.</strong>
+          <small>Entrepreneur, Mumbai</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FAQ ============ -->
+  <h2 class="section-title">❓ Frequently Asked Questions</h2>
+  <p class="section-sub">Answers to what you might be wondering</p>
+
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q">Is SafeHer free to use? <span class="arrow">▾</span></div>
+      <div class="faq-a">Yes, SafeHer is 100% free. No hidden charges, no premium plans. Our mission is to make safety accessible to every woman.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Where is my data stored? <span class="arrow">▾</span></div>
+      <div class="faq-a">All your data — contacts, alerts, profile — is stored ONLY in your browser using local storage. Nothing is uploaded to any server, and no one else can access it.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Does SOS work without internet? <span class="arrow">▾</span></div>
+      <div class="faq-a">The SOS button itself works offline — it saves your alert locally. However, to actually notify your contacts, you'd need internet. We recommend enabling mobile data as backup.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I use SafeHer on my phone? <span class="arrow">▾</span></div>
+      <div class="faq-a">Absolutely! SafeHer is fully mobile-friendly. Just open it in your phone's browser. You can also add it to your home screen for app-like access.</div>
+    </div>
+  </div>
+
+  <!-- ============ CTA ============ -->
+  <div class="cta-section">
+    <h2>Ready to Feel Safer? 🛡️</h2>
+    <p>Join thousands of women who trust SafeHer every day.</p>
+    <a href="register.html" class="cta-btn">Create Free Account</a>
+  </div>
+
 </div>
 
-<!-- Footer will be injected here -->
 <div id="footer-placeholder"></div>
-
 <div class="toast" id="toast"></div>
 
 <script src="theme.js"></script>
+<script>
+  /* ============ Typing Animation ============ */
+  const phrases = ["Our Priority", "Our Mission", "Our Promise", "Your Shield"];
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  const typingEl = document.getElementById('typingText');
+
+  function typeLoop() {
+    const current = phrases[phraseIndex];
+    if (isDeleting) {
+      typingEl.textContent = current.substring(0, charIndex - 1);
+      charIndex--;
+      if (charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(typeLoop, 400);
+        return;
+      }
+      setTimeout(typeLoop, 50);
+    } else {
+      typingEl.textContent = current.substring(0, charIndex + 1);
+      charIndex++;
+      if (charIndex === current.length) {
+        isDeleting = true;
+        setTimeout(typeLoop, 1800);
+        return;
+      }
+      setTimeout(typeLoop, 90);
+    }
+  }
+  setTimeout(typeLoop, 800);
+
+  /* ============ Animated Counters ============ */
+  function animateCounters() {
+    const counters = document.querySelectorAll('.stat-num');
+    counters.forEach(counter => {
+      const target = parseInt(counter.dataset.count);
+      const duration = 2000;
+      const step = target / (duration / 16);
+      let current = 0;
+
+      const update = () => {
+        current += step;
+        if (current >= target) {
+          counter.textContent = target.toLocaleString() + (target >= 1000 ? '+' : '');
+          if (target === 98) counter.textContent = target + '%';
+          if (target === 24) counter.textContent = target + '';
+          return;
+        }
+        counter.textContent = Math.floor(current).toLocaleString();
+        requestAnimationFrame(update);
+      };
+      update();
+    });
+  }
+
+  /* ============ Intersection Observer for Counters ============ */
+  const statsBand = document.querySelector('.stats-band');
+  if (statsBand) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(statsBand);
+  }
+
+  /* ============ FAQ Accordion ============ */
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.querySelector('.faq-q').addEventListener('click', () => {
+      document.querySelectorAll('.faq-item').forEach(i => {
+        if (i !== item) i.classList.remove('open');
+      });
+      item.classList.toggle('open');
+    });
+  });
+
+  /* ============ Reveal on Scroll ============ */
+  const revealTargets = document.querySelectorAll(
+    '.section-title, .section-sub, .steps, .defense-grid, .testimonials, .faq, .cta-section'
+  );
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealTargets.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'all 0.8s ease';
+    revealObserver.observe(el);
+  });
+</script>
 </body>
 </html>
