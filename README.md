@@ -171,27 +171,9 @@ Just open the live URL — no installation needed.
 # Clone the repository
 git clone https://github.com/patilkinnari53-sketch/safewomenapp.git
 cd safewomenapp
-
-# Option A: Direct open (some features may need a server)
-open index.html
-
-# Option B: Use a local server (recommended for full functionality)
-python3 -m http.server 8000
-# Then visit http://localhost:8000 in your browser
-```
-
-### Option 3: Deploy Your Own
-1. Fork this repo
-2. Go to **Settings** → **Pages**
-3. Under **Source**, choose **Deploy from a branch**
-4. Select **main** / **root**
-5. Click **Save**
-6. Wait 1–2 minutes → visit `https://YOUR-USERNAME.github.io/safewomenapp/`
-
 ---
 
-## 🔒 Privacy Promise
-
+## 🔒 Privacy Promis
 Your safety should never come at the cost of your privacy. SafeHer commits to:
 
 - ✅ **No server uploads** — Every byte of data stays in your browser
