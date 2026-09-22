@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — SafeHer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
+  </script>
+  <style>.dark-loading body { background: #121212; }</style>
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page">
+  <h1>ℹ️ About SafeHer</h1>
+  <p class="subtitle">Built with a mission to make every woman feel safe.</p>
+
+  <div class="card" style="text-align:left;padding:30px">
+    <h2 style="color:var(--primary);margin-bottom:15px">🎯 Our Mission</h2>
+    <p style="color:var(--text-muted);font-size:16px">
+      SafeHer is a free web application designed to provide women with quick access to emergency
+      help, trusted contacts, and safety resources. In an emergency, every second counts —
+      our goal is to make that second count for you.
+    </p>
+  </div>
+
+  <div class="card" style="text-align:left;padding:30px;margin-top:20px">
+    <h2 style="color:var(--primary);margin-bottom:15px">✨ Features</h2>
+    <ul style="color:var(--text-muted);font-size:16px;padding-left:20px;line-height:2">
+      <li>🚨 One-tap SOS with 5-second cancel window</li>
+      <li>📍 Live location sharing with emergency contacts</li>
+      <li>👥 Manage multiple trusted contacts</li>
+      <li>📜 Complete alert history</li>
+      <li>🆘 Direct dial to national helplines</li>
+      <li>🌗 Dark mode & light mode</li>
+      <li>💾 Works offline (data stored in your browser)</li>
+      <li>📱 Mobile-friendly design</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:left;padding:30px;margin-top:20px">
+    <h2 style="color:var(--primary);margin-bottom:15px">🔒 Privacy First</h2>
+    <p style="color:var(--text-muted);font-size:16px">
+      All your data — contacts, alerts, and profile — is stored <strong>only in your browser</strong>
+      using local storage. Nothing is sent to any server. Your information never leaves your device.
+    </p>
+  </div>
+
+  <div class="card" style="text-align:left;padding:30px;margin-top:20px">
+    <h2 style="color:var(--primary);margin-bottom:15px">💻 Tech Stack</h2>
+    <p style="color:var(--text-muted);font-size:16px">
+      Built with ❤️ using HTML5, CSS3, and vanilla JavaScript. Hosted for free on GitHub Pages.
+      No frameworks, no build tools, no backend — just pure web technology.
+    </p>
+  </div>
+
+  <div class="card" style="text-align:left;padding:30px;margin-top:20px">
+    <h2 style="color:var(--primary);margin-bottom:15px">🚨 Emergency</h2>
+    <p style="color:var(--text-muted);font-size:16px">
+      If you are in immediate danger, please call the national emergency number
+      <a href="tel:112" style="color:var(--accent);font-weight:bold">112</a> or
+      Women Helpline <a href="tel:181" style="color:var(--accent);font-weight:bold">181</a>.
+    </p>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div class="toast" id="toast"></div>
+
+<script src="theme.js"></script>
+</body>
+</html>
