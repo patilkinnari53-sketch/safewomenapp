@@ -3,47 +3,1009 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Safety Tips & Helplines — SafeHer</title>
+  <title>Safety Tips & Self-Defense — SafeHer</title>
   <link rel="stylesheet" href="style.css" />
   <script>
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-loading');
   </script>
-  <style>.dark-loading body { background: #121212; }</style>
+  <style>
+    .dark-loading body { background: #121212; }
+
+    /* ---- TIPS PAGE STYLES ---- */
+
+    /* Quick jump navigation */
+    .jump-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 40px;
+      padding: 16px;
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 4px 15px var(--shadow);
+      animation: fadeSlideIn 0.6s ease;
+    }
+    .jump-nav a {
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--primary);
+      background: rgba(123,31,162,0.08);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .jump-nav a:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(123,31,162,0.3);
+    }
+
+    /* Big helpline cards (categorized) */
+    .helpline-category {
+      margin-bottom: 32px;
+    }
+    .helpline-category h3 {
+      color: var(--accent);
+      font-size: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeSlideIn 0.5s ease;
+    }
+
+    /* Self-defense cards with ANIMATED icons */
+    .defense-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-top: 30px;
+    }
+    .defense-card {
+      background: var(--card-bg);
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px var(--shadow);
+      border-top: 5px solid var(--accent);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: cardEnter 0.6s ease backwards;
+      position: relative;
+      overflow: hidden;
+    }
+    .defense-card:nth-child(1) { animation-delay: 0.05s; }
+    .defense-card:nth-child(2) { animation-delay: 0.1s; }
+    .defense-card:nth-child(3) { animation-delay: 0.15s; }
+    .defense-card:nth-child(4) { animation-delay: 0.2s; }
+    .defense-card:nth-child(5) { animation-delay: 0.25s; }
+    .defense-card:nth-child(6) { animation-delay: 0.3s; }
+    .defense-card:nth-child(7) { animation-delay: 0.35s; }
+    .defense-card:nth-child(8) { animation-delay: 0.4s; }
+    .defense-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px var(--shadow-strong);
+      border-top-color: var(--primary);
+    }
+
+    /* Animated icon container */
+    .def-anim {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .def-anim .main-icon {
+      font-size: 60px;
+      display: inline-block;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.4s;
+    }
+    .defense-card:hover .def-anim .main-icon {
+      animation: defenseShake 0.6s ease;
+    }
+    @keyframes defenseShake {
+      0%, 100% { transform: rotate(0) scale(1); }
+      25% { transform: rotate(-15deg) scale(1.15); }
+      50% { transform: rotate(15deg) scale(1.15); }
+      75% { transform: rotate(-10deg) scale(1.1); }
+    }
+
+    /* Pulse rings behind the icon */
+    .def-anim::before,
+    .def-anim::after {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      opacity: 0;
+      animation: defRipple 2.5s infinite;
+    }
+    .def-anim::after {
+      animation-delay: 1.25s;
+    }
+    @keyframes defRipple {
+      0% { transform: scale(0.6); opacity: 0.8; }
+      100% { transform: scale(1.7); opacity: 0; }
+    }
+
+    /* Impact dots showing where to hit */
+    .impact-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .impact-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.4;
+      animation: dotBlink 2s infinite;
+    }
+    .impact-dot:nth-child(2) { animation-delay: 0.3s; }
+    .impact-dot:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes dotBlink {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+
+    .defense-card h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .defense-card .def-sub {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+    .defense-card ol {
+      padding-left: 20px;
+      color: var(--text-muted);
+      line-height: 1.9;
+      font-size: 14.5px;
+    }
+    .defense-card ol li {
+      margin-bottom: 6px;
+      transition: color 0.3s;
+    }
+    .defense-card:hover ol li {
+      color: var(--text);
+    }
+
+    /* Priority tag */
+    .priority-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .priority-tag.high { background: #dc3545; color: white; }
+    .priority-tag.med { background: #ffc107; color: #333; }
+
+    /* Safety tips categories */
+    .tip-category {
+      margin-bottom: 36px;
+      animation: fadeSlideIn 0.7s ease;
+    }
+    .tip-category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, rgba(123,31,162,0.1), rgba(233,30,99,0.05));
+      border-radius: 14px;
+      border-left: 5px solid var(--primary);
+    }
+    .tip-category-header .cat-icon {
+      font-size: 32px;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    .tip-category-header h3 {
+      color: var(--primary);
+      font-size: 20px;
+      margin: 0;
+    }
+    .tip-category-header p {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .tip-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .tip-item {
+      background: var(--card-bg);
+      padding: 18px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px var(--shadow);
+      display: flex;
+      gap: 14px;
+      transition: all 0.3s;
+      animation: slideInLeft 0.5s ease backwards;
+    }
+    .tip-item:hover {
+      transform: translateX(6px);
+      box-shadow: 0 8px 20px var(--shadow-strong);
+    }
+    .tip-item .tip-icon {
+      font-size: 26px;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    .tip-item:hover .tip-icon { animation: iconBounce 0.6s ease; }
+    .tip-item .tip-content strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .tip-item .tip-content p {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    /* Situational guides */
+    .situation-card {
+      background: var(--card-bg);
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px var(--shadow);
+      margin-bottom: 16px;
+      border-left: 5px solid var(--accent);
+      animation: fadeSlideIn 0.6s ease backwards;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .situation-card:hover {
+      transform: translateX(6px);
+      box-shadow: 0 8px 22px var(--shadow-strong);
+    }
+    .situation-card .sit-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+    .situation-card .sit-header .sit-icon {
+      font-size: 32px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(233,30,99,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .situation-card .sit-header h4 {
+      color: var(--primary);
+      flex: 1;
+      font-size: 16px;
+    }
+    .situation-card .sit-header .sit-arrow {
+      color: var(--primary);
+      font-size: 20px;
+      transition: transform 0.3s;
+    }
+    .situation-card.open .sit-header .sit-arrow { transform: rotate(180deg); }
+    .situation-card .sit-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      padding: 0 0 0 64px;
+    }
+    .situation-card.open .sit-body {
+      max-height: 400px;
+      padding: 16px 0 0 64px;
+    }
+    .situation-card .sit-body ol {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.8;
+      padding-left: 20px;
+    }
+    .situation-card .sit-body ol li { margin-bottom: 6px; }
+
+    /* Legal rights */
+    .rights-card {
+      background: var(--card-bg);
+      padding: 22px 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px var(--shadow);
+      margin-bottom: 14px;
+      border-left: 5px solid #28a745;
+      display: flex;
+      gap: 14px;
+      transition: 0.3s;
+      animation: fadeSlideIn 0.5s ease backwards;
+    }
+    .rights-card:nth-child(1) { animation-delay: 0.05s; }
+    .rights-card:nth-child(2) { animation-delay: 0.1s; }
+    .rights-card:nth-child(3) { animation-delay: 0.15s; }
+    .rights-card:nth-child(4) { animation-delay: 0.2s; }
+    .rights-card:hover {
+      transform: translateX(6px);
+      box-shadow: 0 8px 20px var(--shadow-strong);
+    }
+    .rights-card .rights-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .rights-card strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .rights-card p {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    /* Section title */
+    .section-title-tips {
+      color: var(--primary);
+      margin: 50px 0 16px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeSlideIn 0.6s ease;
+    }
+    .section-title-tips .section-emoji {
+      display: inline-block;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes iconBounce {
+      0%, 100% { transform: scale(1) rotate(0); }
+      25% { transform: scale(1.2) rotate(-10deg); }
+      50% { transform: scale(1.15) rotate(10deg); }
+      75% { transform: scale(1.1) rotate(-5deg); }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Emergency banner at top */
+    .emergency-banner {
+      background: linear-gradient(135deg, #dc3545, #c9184a);
+      color: white;
+      padding: 22px 26px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(220,53,69,0.3);
+      animation: fadeSlideIn 0.6s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .emergency-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 60%);
+      animation: shimmer 3s infinite;
+    }
+    @keyframes shimmer {
+      0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; }
+    }
+    .emergency-banner h2 {
+      font-size: 22px;
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .emergency-banner p {
+      font-size: 14px;
+      opacity: 0.95;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .emergency-banner .em-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .emergency-banner .em-buttons a {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.4);
+      transition: all 0.3s;
+    }
+    .emergency-banner .em-buttons a:hover {
+      background: white;
+      color: #dc3545;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
 
 <div id="nav-placeholder"></div>
 
 <div class="page">
-  <h1>🆘 Safety Tips & Helplines</h1>
-  <p class="subtitle">Stay informed. Stay safe.</p>
 
-  <h2 style="color:var(--accent)">📞 Emergency Helplines (India)</h2>
-  <div class="grid" style="margin-top:20px">
-    <a class="helpline" href="tel:100"><div class="icon">👮</div><strong>Police</strong><div class="num">100</div></a>
-    <a class="helpline" href="tel:181"><div class="icon">🆘</div><strong>Women Helpline</strong><div class="num">181</div></a>
-    <a class="helpline" href="tel:112"><div class="icon">🚑</div><strong>Emergency</strong><div class="num">112</div></a>
-    <a class="helpline" href="tel:1098"><div class="icon">👶</div><strong>Child Helpline</strong><div class="num">1098</div></a>
-    <a class="helpline" href="tel:1091"><div class="icon">🚫</div><strong>Anti-Stalking</strong><div class="num">1091</div></a>
-    <a class="helpline" href="tel:181"><div class="icon">🏠</div><strong>Domestic Abuse</strong><div class="num">181</div></a>
+  <h1>🆘 Safety Tips & Self-Defense Guide</h1>
+  <p class="subtitle">Everything you need to stay safe — tips, techniques, and helplines.</p>
+
+  <!-- Quick Jump -->
+  <div class="jump-nav">
+    <a href="#helplines">📞 Helplines</a>
+    <a href="#defense">🥋 Self-Defense</a>
+    <a href="#tips">💡 Safety Tips</a>
+    <a href="#situations">🎯 Situations</a>
+    <a href="#rights">⚖️ Your Rights</a>
+    <a href="#apps">📱 Apps</a>
   </div>
 
-  <h2 style="color:var(--accent);margin-top:50px">🛡️ Safety Tips</h2>
-  <div class="grid" style="margin-top:20px">
-    <div class="card"><div style="font-size:40px">📍</div><h3>Share Your Location</h3><p>Always share your live location with a trusted contact when travelling alone.</p></div>
-    <div class="card"><div style="font-size:40px">🧠</div><h3>Trust Your Instincts</h3><p>If something feels wrong, it probably is. Remove yourself from the situation.</p></div>
-    <div class="card"><div style="font-size:40px">👀</div><h3>Stay Aware</h3><p>Avoid distractions like headphones and phones in unfamiliar areas.</p></div>
-    <div class="card"><div style="font-size:40px">📞</div><h3>Save Emergency Numbers</h3><p>Keep emergency numbers on speed dial for quick access.</p></div>
-    <div class="card"><div style="font-size:40px">👭</div><h3>Travel in Groups</h3><p>Whenever possible, travel with friends, especially at night.</p></div>
-    <div class="card"><div style="font-size:40px">🥋</div><h3>Learn Self-Defense</h3><p>Basic self-defense training boosts confidence and safety.</p></div>
-    <div class="card"><div style="font-size:40px">💡</div><h3>Stick to Lit Areas</h3><p>Prefer well-lit, populated routes over dark shortcuts.</p></div>
-    <div class="card"><div style="font-size:40px">📱</div><h3>Keep Phone Charged</h3><p>Always carry a charged phone and a power bank.</p></div>
+  <!-- Emergency Banner -->
+  <div class="emergency-banner">
+    <h2>🚨 In Immediate Danger?</h2>
+    <p>Don't hesitate. Call now. Help is one tap away.</p>
+    <div class="em-buttons">
+      <a href="tel:112">📞 112 Emergency</a>
+      <a href="tel:181">🆘 181 Women</a>
+      <a href="tel:1091">👮 1091 Police</a>
+    </div>
   </div>
+
+  <!-- ============ HELPLINES ============ -->
+  <h2 class="section-title-tips" id="helplines">
+    <span class="section-emoji">📞</span> Emergency Helplines (India)
+  </h2>
+
+  <div class="helpline-category">
+    <h3>🚨 Emergency Services</h3>
+    <div class="grid">
+      <a class="helpline" href="tel:112"><div class="icon">🆘</div><strong>National Emergency</strong><div class="num">112</div></a>
+      <a class="helpline" href="tel:100"><div class="icon">👮</div><strong>Police</strong><div class="num">100</div></a>
+      <a class="helpline" href="tel:101"><div class="icon">🚒</div><strong>Fire</strong><div class="num">101</div></a>
+      <a class="helpline" href="tel:102"><div class="icon">🚑</div><strong>Ambulance</strong><div class="num">102</div></a>
+    </div>
+  </div>
+
+  <div class="helpline-category">
+    <h3>👩 Women & Children</h3>
+    <div class="grid">
+      <a class="helpline" href="tel:181"><div class="icon">👩</div><strong>Women Helpline</strong><div class="num">181</div></a>
+      <a class="helpline" href="tel:1091"><div class="icon">🚫</div><strong>Women in Distress</strong><div class="num">1091</div></a>
+      <a class="helpline" href="tel:1098"><div class="icon">👶</div><strong>Child Helpline</strong><div class="num">1098</div></a>
+      <a class="helpline" href="tel:1090"><div class="icon">💬</div><strong>Women Helpline (UP)</strong><div class="num">1090</div></a>
+    </div>
+  </div>
+
+  <div class="helpline-category">
+    <h3>🛡️ Specialized Support</h3>
+    <div class="grid">
+      <a class="helpline" href="tel:1091"><div class="icon">🚫</div><strong>Anti-Stalking</strong><div class="num">1091</div></a>
+      <a class="helpline" href="tel:181"><div class="icon">🏠</div><strong>Domestic Abuse</strong><div class="num">181</div></a>
+      <a class="helpline" href="tel:9152987821"><div class="icon">💚</div><strong>Mental Health (iCall)</strong><div class="num">9152987821</div></a>
+      <a class="helpline" href="tel:18001805555"><div class="icon">🧠</div><strong>Suicide Prevention</strong><div class="num">1800-180-5555</div></a>
+    </div>
+  </div>
+
+  <!-- ============ SELF DEFENSE ============ -->
+  <h2 class="section-title-tips" id="defense">
+    <span class="section-emoji">🥋</span> Self-Defense Techniques
+  </h2>
+  <p class="subtitle" style="margin-bottom:0">Simple moves that can save your life. Practice them.</p>
+
+  <div class="defense-grid">
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">✋</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Palm Strike <span class="priority-tag high">High</span></h3>
+      <p class="def-sub">Best when attacker is close in front of you</p>
+      <ol>
+        <li>Keep fingers together, hand flat</li>
+        <li>Aim for the attacker's <strong>nose or chin</strong></li>
+        <li>Strike <strong>upward</strong> with the heel of your palm</li>
+        <li>Immediately step back and shout "FIRE!"</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">🦵</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Knee Strike <span class="priority-tag high">High</span></h3>
+      <p class="def-sub">When grabbed from the front</p>
+      <ol>
+        <li>Grab attacker's shoulders or arms</li>
+        <li>Pull them down while raising your knee</li>
+        <li>Strike their <strong>groin or thigh</strong> hard</li>
+        <li>Run to a crowded, well-lit place</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">👊</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Elbow Strike <span class="priority-tag high">High</span></h3>
+      <p class="def-sub">Best when grabbed from behind</p>
+      <ol>
+        <li>Bend your elbow at 90°</li>
+        <li>Swing it <strong>backward</strong> into their ribs or chest</li>
+        <li>Use your body weight — not just arm strength</li>
+        <li>Follow with a swift escape</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">🖐️</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Wrist Release <span class="priority-tag high">High</span></h3>
+      <p class="def-sub">When your wrist is grabbed</p>
+      <ol>
+        <li>Rotate your wrist toward their <strong>thumb</strong></li>
+        <li>Pull sharply in the direction of the thumb</li>
+        <li>Push their arm away with your other hand</li>
+        <li>Move quickly away from them</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">🦶</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Heel Kick <span class="priority-tag high">High</span></h3>
+      <p class="def-sub">When attacked from behind</p>
+      <ol>
+        <li>Balance on one leg</li>
+        <li>Kick back hard with your <strong>heel</strong></li>
+        <li>Aim for their <strong>shin or knee</strong></li>
+        <li>Turn around and use palm strike if needed</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">🎯</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Vulnerable Spots <span class="priority-tag med">Learn</span></h3>
+      <p class="def-sub">Where to strike for maximum impact</p>
+      <ol>
+        <li><strong>Eyes</strong> — poke with fingers</li>
+        <li><strong>Nose</strong> — palm strike upward</li>
+        <li><strong>Groin</strong> — knee or kick</li>
+        <li><strong>Shins</strong> — kick with heel</li>
+        <li><strong>Throat</strong> — chop with side of hand</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">🆘</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Escape & Alert <span class="priority-tag high">Critical</span></h3>
+      <p class="def-sub">Most important — get away and get help</p>
+      <ol>
+        <li>Shout <strong>"FIRE!"</strong> — gets more attention than "Help"</li>
+        <li>Break free and run toward crowds</li>
+        <li>Enter any open shop or public place</li>
+        <li>Call <strong>112 or 1091</strong> immediately</li>
+        <li>Trigger SafeHer SOS to alert contacts</li>
+      </ol>
+    </div>
+
+    <div class="defense-card">
+      <div class="def-anim">
+        <div class="main-icon">🎒</div>
+      </div>
+      <div class="impact-dots"><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></div>
+      <h3>Improvised Weapons <span class="priority-tag med">Smart</span></h3>
+      <p class="def-sub">Everyday items you can use</p>
+      <ol>
+        <li><strong>Keys</strong> — hold between fingers, jab</li>
+        <li><strong>Umbrella</strong> — poke with the tip</li>
+        <li><strong>Bag</strong> — swing at their head</li>
+        <li><strong>Hot drink</strong> — throw at their face</li>
+        <li><strong>Pepper spray</strong> — aim for eyes (if legal)</li>
+      </ol>
+    </div>
+
+  </div>
+
+  <!-- ============ SAFETY TIPS BY CATEGORY ============ -->
+  <h2 class="section-title-tips" id="tips">
+    <span class="section-emoji">💡</span> Safety Tips by Situation
+  </h2>
+
+  <!-- Travel -->
+  <div class="tip-category">
+    <div class="tip-category-header">
+      <span class="cat-icon">🚗</span>
+      <div>
+        <h3>Traveling</h3>
+        <p>On the road, in cabs, or walking</p>
+      </div>
+    </div>
+    <div class="tip-list">
+      <div class="tip-item"><span class="tip-icon">📍</span><div class="tip-content"><strong>Share live location</strong><p>Send your route to a trusted contact before you leave.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🚕</span><div class="tip-content"><strong>Verify cab details</strong><p>Match the number plate with the app before getting in.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🪟</span><div class="tip-content"><strong>Sit near exits</strong><p>In buses or trains, choose a seat close to the door.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">📱</span><div class="tip-content"><strong>Fake call trick</strong><p>Pretend you're on a call with someone waiting for you.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🌆</span><div class="tip-content"><strong>Avoid isolated routes</strong><p>Stick to busy, well-lit streets even if longer.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🔋</span><div class="tip-content"><strong>Keep phone charged</strong><p>Carry a power bank for longer trips.</p></div></div>
+    </div>
+  </div>
+
+  <!-- Home -->
+  <div class="tip-category">
+    <div class="tip-category-header">
+      <span class="cat-icon">🏠</span>
+      <div>
+        <h3>At Home</h3>
+        <p>Staying safe where you live</p>
+      </div>
+    </div>
+    <div class="tip-list">
+      <div class="tip-item"><span class="tip-icon">🚪</span><div class="tip-content"><strong>Lock doors always</strong><p>Even for short trips to the mailbox.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">👁️</span><div class="tip-content"><strong>Use peepholes</strong><p>Never open without checking who's there.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">💡</span><div class="tip-content"><strong>Motion lights</strong><p>Install sensor lights around entrances.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">📦</span><div class="tip-content"><strong>Delivery safety</strong><p>Ask for packages to be left outside, not delivered inside.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🔑</span><div class="tip-content"><strong>Spare key</strong><p>Give to a trusted neighbor, not under a doormat.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">📹</span><div class="tip-content"><strong>Video doorbell</strong><p>See visitors before answering.</p></div></div>
+    </div>
+  </div>
+
+  <!-- Online -->
+  <div class="tip-category">
+    <div class="tip-category-header">
+      <span class="cat-icon">🌐</span>
+      <div>
+        <h3>Online & Social Media</h3>
+        <p>Digital safety matters too</p>
+      </div>
+    </div>
+    <div class="tip-list">
+      <div class="tip-item"><span class="tip-icon">🔒</span><div class="tip-content"><strong>Private accounts</strong><p>Make your social profiles private.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">📍</span><div class="tip-content"><strong>No live location posts</strong><p>Post stories only after you've left a place.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🕵️</span><div class="tip-content"><strong>Vet online friends</strong><p>Never meet strangers alone in private places.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🔐</span><div class="tip-content"><strong>Strong passwords</strong><p>Use unique passwords, enable 2FA everywhere.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">📸</span><div class="tip-content"><strong>Limit personal photos</strong><p>Avoid public photos of your home or workplace.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🚫</span><div class="tip-content"><strong>Block & report</strong><p>Never engage with harassers — block and report.</p></div></div>
+    </div>
+  </div>
+
+  <!-- Workplace -->
+  <div class="tip-category">
+    <div class="tip-category-header">
+      <span class="cat-icon">💼</span>
+      <div>
+        <h3>Workplace</h3>
+        <p>Know your rights at work</p>
+      </div>
+    </div>
+    <div class="tip-list">
+      <div class="tip-item"><span class="tip-icon">📢</span><div class="tip-content"><strong>Speak up</strong><p>Report harassment to HR immediately in writing.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">🤝</span><div class="tip-content"><strong>Buddy system</strong><p>Walk to parking or transport with a colleague.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">📝</span><div class="tip-content"><strong>Document everything</strong><p>Keep emails, messages, and dates of incidents.</p></div></div>
+      <div class="tip-item"><span class="tip-icon">⚖️</span><div class="tip-content"><strong>Know the law</strong><p>POSH Act 2013 protects women at workplaces.</p></div></div>
+    </div>
+  </div>
+
+  <!-- ============ SITUATIONAL GUIDES ============ -->
+  <h2 class="section-title-tips" id="situations">
+    <span class="section-emoji">🎯</span> What To Do If...
+  </h2>
+  <p class="subtitle" style="margin-bottom:0">Click on each situation to see step-by-step actions</p>
+
+  <div style="margin-top:20px">
+
+    <div class="situation-card" onclick="toggleSituation(this)">
+      <div class="sit-header">
+        <div class="sit-icon">🚶‍♀️</div>
+        <h4>You think someone is following you</h4>
+        <span class="sit-arrow">▾</span>
+      </div>
+      <div class="sit-body">
+        <ol>
+          <li>Cross the street and see if they follow</li>
+          <li>Walk into a shop, restaurant, or crowded area</li>
+          <li>Call a friend or family member — talk loudly</li>
+          <li>If still followed, call 112 or your local police</li>
+          <li>Trigger SafeHer SOS — your contacts get your location</li>
+          <li>Never go home — go to a police station or a busy place</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="situation-card" onclick="toggleSituation(this)">
+      <div class="sit-header">
+        <div class="sit-icon">🚕</div>
+        <h4>You feel unsafe in a cab or auto</h4>
+        <span class="sit-arrow">▾</span>
+      </div>
+      <div class="sit-body">
+        <ol>
+          <li>Share your live location with a trusted contact</li>
+          <li>Take a photo of the number plate — even if for show</li>
+          <li>Pretend to call someone and say "I'll be there in 5 minutes"</li>
+          <li>Ask the driver to stop at a busy place if you feel uneasy</li>
+          <li>Get out — you don't owe anyone an explanation</li>
+          <li>Report to the cab company and police</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="situation-card" onclick="toggleSituation(this)">
+      <div class="sit-header">
+        <div class="sit-icon">💬</div>
+        <h4>Someone is harassing you online</h4>
+        <span class="sit-arrow">▾</span>
+      </div>
+      <div class="sit-body">
+        <ol>
+          <li><strong>Don't reply</strong> — any response fuels them</li>
+          <li>Take screenshots of all messages</li>
+          <li>Block the account on all platforms</li>
+          <li>Report to the platform — most have specific options for women</li>
+          <li>File a complaint at <strong>cybercrime.gov.in</strong></li>
+          <li>Call 1930 — Cyber Crime Helpline (24/7)</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="situation-card" onclick="toggleSituation(this)">
+      <div class="sit-header">
+        <div class="sit-icon">👥</div>
+        <h4>You're being physically grabbed</h4>
+        <span class="sit-arrow">▾</span>
+      </div>
+      <div class="sit-body">
+        <ol>
+          <li><strong>Shout "FIRE!"</strong> — louder attention than "Help"</li>
+          <li>Use your strongest weapon — <strong>elbow, knee, heel</strong></li>
+          <li>Aim for eyes, nose, groin, or throat</li>
+          <li>Break free and <strong>run toward people</strong></li>
+          <li>Enter any open shop and ask them to call police</li>
+          <li>Call 112 immediately after you're safe</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="situation-card" onclick="toggleSituation(this)">
+      <div class="sit-header">
+        <div class="sit-icon">🏠</div>
+        <h4>You're in an unsafe home environment</h4>
+        <span class="sit-arrow">▾</span>
+      </div>
+      <div class="sit-body">
+        <ol>
+          <li>Call <strong>181</strong> — Women Helpline (24/7, free)</li>
+          <li>Reach out to a trusted friend or family member</li>
+          <li>Keep important documents and money handy</li>
+          <li>Have a "go bag" with essentials ready</li>
+          <li>Identify a safe place — a friend's home, shelter, or relative</li>
+          <li>File a complaint if you're ready — police must help under Domestic Violence Act</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="situation-card" onclick="toggleSituation(this)">
+      <div class="sit-header">
+        <div class="sit-icon">🚌</div>
+        <h4>You're being harassed in public transport</h4>
+        <span class="sit-arrow">▾</span>
+      </div>
+      <div class="sit-body">
+        <ol>
+          <li><strong>Say loudly</strong>: "Don't touch me!" — embarrass the person</li>
+          <li>Move to a different seat or coach (near other women if possible)</li>
+          <li>Look for the emergency button in metro/train</li>
+          <li>Call 1820 (Indian Railways helpline) if on a train</li>
+          <li>Note down time, coach number, and description</li>
+          <li>Report to the police — eve-teasing is punishable under IPC 509</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ LEGAL RIGHTS ============ -->
+  <h2 class="section-title-tips" id="rights">
+    <span class="section-emoji">⚖️</span> Your Legal Rights (India)
+  </h2>
+  <p class="subtitle" style="margin-bottom:20px">Know the laws that protect you.</p>
+
+  <div class="rights-card">
+    <div class="rights-icon">👮</div>
+    <div>
+      <strong>Right to file an FIR</strong>
+      <p>Police <strong>cannot refuse</strong> to file an FIR for a cognizable offense. If they do, you can send a written complaint to the Superintendent of Police under Section 154(3) CrPC.</p>
+    </div>
+  </div>
+
+  <div class="rights-card">
+    <div class="rights-icon">🏠</div>
+    <div>
+      <strong>Protection from Domestic Violence</strong>
+      <p>Under the Protection of Women from Domestic Violence Act 2005, you have the right to protection orders, residence orders, and monetary relief.</p>
+    </div>
+  </div>
+
+  <div class="rights-card">
+    <div class="rights-icon">💼</div>
+    <div>
+      <strong>Protection at Workplace (POSH)</strong>
+      <p>The Sexual Harassment of Women at Workplace Act 2013 requires every workplace with 10+ employees to have an Internal Complaints Committee. Your complaint must be addressed within 90 days.</p>
+    </div>
+  </div>
+
+  <div class="rights-card">
+    <div class="rights-icon">🚫</div>
+    <div>
+      <strong>Zero FIR</strong>
+      <p>You can file an FIR at ANY police station, regardless of jurisdiction. It will be transferred to the correct station later. Police cannot refuse this.</p>
+    </div>
+  </div>
+
+  <div class="rights-card">
+    <div class="rights-icon">🎥</div>
+    <div>
+      <strong>Right to Free Legal Aid</strong>
+      <p>Women are entitled to free legal aid under the Legal Services Authorities Act. Contact your District Legal Services Authority (DLSA) or call 15100.</p>
+    </div>
+  </div>
+
+  <div class="rights-card">
+    <div class="rights-icon">📱</div>
+    <div>
+      <strong>Cyber Harassment Protection</strong>
+      <p>Under IT Act 2000, Section 66E, 67, and 72, sharing private images or harassing online is a punishable offense. Report at cybercrime.gov.in or call 1930.</p>
+    </div>
+  </div>
+
+  <!-- ============ SAFETY APPS ============ -->
+  <h2 class="section-title-tips" id="apps">
+    <span class="section-emoji">📱</span> Recommended Safety Apps & Tools
+  </h2>
+
+  <div class="grid">
+    <div class="card">
+      <div style="font-size:40px">🛡️</div>
+      <h3>SafeHer</h3>
+      <p>You're using it! SOS + location + contacts.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:40px">🚨</div>
+      <h3>112 India App</h3>
+      <p>Official government emergency app with panic button.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:40px">📍</div>
+      <h3>Himmat Plus</h3>
+      <p>Delhi Police app for women's safety with SOS.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:40px">🆘</div>
+      <h3>Shake2Safety</h3>
+      <p>Shake your phone to send SOS to emergency contacts.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:40px">👩</div>
+      <h3>Women Safety Shield</h3>
+      <p>Multiple SOS options and fake call features.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:40px">🚕</div>
+      <h3>Ridesafe</h3>
+      <p>Track your cab journey with trusted contacts.</p>
+    </div>
+  </div>
+
+  <!-- ============ NUMBERS TO MEMORIZE ============ -->
+  <h2 class="section-title-tips">
+    <span class="section-emoji">🧠</span> Numbers to Memorize
+  </h2>
+  <p class="subtitle" style="margin-bottom:20px">If you lose your phone, these are the numbers to remember.</p>
+
+  <div class="grid" style="margin-bottom:50px">
+    <a class="helpline" href="tel:112">
+      <div class="icon">🆘</div>
+      <strong>All Emergency</strong>
+      <div class="num">112</div>
+    </a>
+    <a class="helpline" href="tel:181">
+      <div class="icon">👩</div>
+      <strong>Women Helpline</strong>
+      <div class="num">181</div>
+    </a>
+    <a class="helpline" href="tel:100">
+      <div class="icon">👮</div>
+      <strong>Police</strong>
+      <div class="num">100</div>
+    </a>
+    <a class="helpline" href="tel:1930">
+      <div class="icon">💻</div>
+      <strong>Cyber Crime</strong>
+      <div class="num">1930</div>
+    </a>
+  </div>
+
 </div>
 
 <div id="footer-placeholder"></div>
 <div class="toast" id="toast"></div>
 
 <script src="theme.js"></script>
+<script>
+  /* ============ Situational card toggle ============ */
+  function toggleSituation(el) {
+    document.querySelectorAll('.situation-card').forEach(c => {
+      if (c !== el) c.classList.remove('open');
+    });
+    el.classList.toggle('open');
+  }
+
+  /* ============ Smooth scroll for jump nav ============ */
+  document.querySelectorAll('.jump-nav a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+</script>
 </body>
 </html>
