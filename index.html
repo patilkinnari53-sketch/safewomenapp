@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🛡️ SafeHer - Women Safety App</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #faf5ff; color: #333; }
+
+    /* Navbar */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 30px; background: #7B1FA2; color: white; flex-wrap: wrap;
+    }
+    nav .logo { font-size: 22px; font-weight: bold; }
+    nav a {
+      color: white; text-decoration: none; margin-left: 18px;
+      font-size: 15px; cursor: pointer;
+    }
+    nav a:hover { color: #ffb3c1; }
+
+    /* Page container */
+    .page { display: none; padding: 40px; max-width: 900px; margin: 0 auto; min-height: calc(100vh - 70px); }
+    .page.active { display: block; }
+
+    /* Hero */
+    .hero {
+      text-align: center; padding: 60px 20px; color: white; border-radius: 15px;
+      background: linear-gradient(135deg, #7B1FA2, #E91E63); margin-bottom: 30px;
+    }
+    .hero h1 { font-size: 42px; margin-bottom: 15px; }
+    .hero p { font-size: 18px; margin-bottom: 25px; }
+    .btn {
+      background: white; color: #7B1FA2; padding: 12px 32px; border-radius: 30px;
+      text-decoration: none; font-weight: bold; font-size: 16px;
+      border: none; cursor: pointer; display: inline-block;
+    }
+
+    /* Feature cards */
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px; margin-top: 20px;
+    }
+    .card {
+      background: white; padding: 25px; border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); text-align: center;
+    }
+    .card h3 { color: #7B1FA2; margin: 10px 0; }
+
+    /* Forms */
+    .form-box {
+      background: white; padding: 35px; border-radius: 15px;
+      max-width: 400px; margin: 40px auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .form-box h2 { color: #7B1FA2; text-align: center; margin-bottom: 20px; }
+    input, select {
+      width: 100%; padding: 12px; margin: 8px 0;
+      border: 1px solid #ddd; border-radius: 8px; font-size: 15px;
+    }
+    .btn-primary {
+      width: 100%; background: #7B1FA2; color: white; padding: 13px;
+      border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-primary:hover { background: #5e1780; }
+
+    /* SOS */
+    .sos-wrap { text-align: center; padding: 30px; }
+    .sos-btn {
+      width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle, #ff4d6d, #c9184a);
+      color: white; border: 8px solid #ffb3c1;
+      font-size: 42px; font-weight: bold; cursor: pointer;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 40px rgba(233,30,99,0.6); }
+      50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(233,30,99,0.9); }
+      100% { transform: scale(1); box-shadow: 0 0 40px rgba(233,30,99,0.6); }
+    }
+
+    /* Helpline cards */
+    .helpline {
+      display: block; background: white; padding: 20px; border-radius: 12px;
+      text-decoration: none; color: #333; text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .helpline .num { color: #7B1FA2; font-size: 22px; font-weight: bold; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #333; color: white; padding: 12px 24px; border-radius: 8px;
+      opacity: 0; transition: opacity 0.3s; z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+
+    h1.page-title { color: #7B1FA2; margin-bottom: 10px; }
+    .subtitle { color: #666; margin-bottom: 30px; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav>
+  <div class="logo">🛡️ SafeHer</div>
+  <div id="navLinks">
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('dashboard')">Dashboard</a>
+    <a onclick="showPage('contacts')">Contacts</a>
+    <a onclick="showPage('location')">Location</a>
+    <a onclick="showPage('alerts')">Alerts</a>
+    <a onclick="showPage('tips')">Tips</a>
+    <a onclick="showPage('login')" id="loginLink">Login</a>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>Your Safety, Our Priority 🛡️</h1>
+    <p>Instant SOS alerts, live location sharing, and trusted contacts — all in one place.</p>
+    <button class="btn" onclick="showPage('dashboard')">Get Started</button>
+  </div>
+  <div class="grid">
+    <div class="card"><div style="font-size:40px">🚨</div><h3>One-Tap SOS</h3><p>Alert all contacts instantly with location</p></div>
+    <div class="card"><div style="font-size:40px">📍</div><h3>Live Location</h3><p>Share real-time GPS with trusted ones</p></div>
+    <div class="card"><div style="font-size:40px">👥</div><h3>Trusted Contacts</h3><p>Manage your emergency circle</p></div>
+    <div class="card"><div style="font-size:40px">🆘</div><h3>24/7 Helplines</h3><p>Quick access to national helplines</p></div>
+  </div>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div class="page" id="page-login">
+  <div class="form-box">
+    <h2>Login</h2>
+    <input id="loginEmail" type="email" placeholder="Email" />
+    <input id="loginPassword" type="password" placeholder="Password" />
+    <button class="btn-primary" onclick="login()">Login</button>
+    <p style="text-align:center;margin-top:12px;color:#666">
+      New user? <a onclick="showPage('register')" style="color:#7B1FA2;cursor:pointer">Register</a>
+    </p>
+  </div>
+</div>
+
+<!-- ===== REGISTER ===== -->
+<div class="page" id="page-register">
+  <div class="form-box">
+    <h2>Create Account</h2>
+    <input id="regName" placeholder="Full Name" />
+    <input id="regEmail" type="email" placeholder="Email" />
+    <input id="regPhone" placeholder="Phone Number" />
+    <input id="regPassword" type="password" placeholder="Password" />
+    <button class="btn-primary" onclick="register()">Register</button>
+    <p style="text-align:center;margin-top:12px;color:#666">
+      Already have an account? <a onclick="showPage('login')" style="color:#7B1FA2;cursor:pointer">Login</a>
+    </p>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="page" id="page-dashboard">
+  <h1 class="page-title" id="welcomeMsg">Welcome 👋</h1>
+  <p class="subtitle">You're safe. We're here for you.</p>
+
+  <div class="sos-wrap">
+    <button class="sos-btn" onclick="triggerSOS()">SOS</button>
+    <p style="margin-top:20px;font-weight:bold;color:#7B1FA2">Press the button in an emergency</p>
+    <p id="sosStatus" style="margin-top:10px"></p>
+  </div>
+
+  <h3 style="margin-top:40px;color:#7B1FA2;text-align:center">Quick Helplines</h3>
+  <div class="grid" style="margin-top:15px">
+    <a class="helpline" href="tel:1091"><div>📞</div><strong>Police</strong><div class="num">1091</div></a>
+    <a class="helpline" href="tel:181"><div>🆘</div><strong>Women Helpline</strong><div class="num">181</div></a>
+    <a class="helpline" href="tel:112"><div>🚑</div><strong>Emergency</strong><div class="num">112</div></a>
+    <a class="helpline" href="tel:1098"><div>👶</div><strong>Child Helpline</strong><div class="num">1098</div></a>
+  </div>
+</div>
+
+<!-- ===== CONTACTS ===== -->
+<div class="page" id="page-contacts">
+  <h1 class="page-title">👥 Emergency Contacts</h1>
+  <p class="subtitle">These people will be alerted when you press SOS.</p>
+
+  <div class="form-box">
+    <h2>Add New Contact</h2>
+    <input id="cName" placeholder="Name" />
+    <input id="cPhone" placeholder="Phone Number" />
+    <input id="cRel" placeholder="Relationship (e.g. Mother)" />
+    <input id="cEmail" type="email" placeholder="Email (optional)" />
+    <button class="btn-primary" onclick="addContact()">Add Contact</button>
+  </div>
+
+  <h3 style="color:#7B1FA2;margin-top:20px">Your Contacts</h3>
+  <div id="contactsList" style="margin-top:15px"></div>
+</div>
+
+<!-- ===== LOCATION ===== -->
+<div class="page" id="page-location">
+  <h1 class="page-title">📍 Live Location</h1>
+  <p class="subtitle">Share your real-time location with trusted contacts.</p>
+
+  <div class="card" style="padding:30px">
+    <button class="btn-primary" style="width:auto;padding:12px 24px" onclick="getLocation()">
+      ▶ Get My Location
+    </button>
+    <div id="locInfo" style="margin-top:20px;text-align:left"></div>
+  </div>
+</div>
+
+<!-- ===== TIPS ===== -->
+<div class="page" id="page-tips">
+  <h1 class="page-title">🆘 Safety Tips & Helplines</h1>
+  <p class="subtitle">Stay informed. Stay safe.</p>
+
+  <h3 style="color:#E91E63">📞 Emergency Helplines (India)</h3>
+  <div class="grid" style="margin-top:15px">
+    <a class="helpline" href="tel:100"><div>👮</div><strong>Police</strong><div class="num">100</div></a>
+    <a class="helpline" href="tel:181"><div>🆘</div><strong>Women Helpline</strong><div class="num">181</div></a>
+    <a class="helpline" href="tel:112"><div>🚑</div><strong>Emergency</strong><div class="num">112</div></a>
+    <a class="helpline" href="tel:1098"><div>👶</div><strong>Child Helpline</strong><div class="num">1098</div></a>
+    <a class="helpline" href="tel:1091"><div>🚫</div><strong>Anti-Stalking</strong><div class="num">1091</div></a>
+    <a class="helpline" href="tel:181"><div>🏠</div><strong>Domestic Abuse</strong><div class="num">181</div></a>
+  </div>
+
+  <h3 style="color:#E91E63;margin-top:40px">🛡️ Safety Tips</h3>
+  <div class="grid" style="margin-top:15px">
+    <div class="card"><h3>Share Your Location</h3><p>Always share your live location with a trusted contact when travelling alone.</p></div>
+    <div class="card"><h3>Trust Your Instincts</h3><p>If something feels wrong, it probably is. Remove yourself from the situation.</p></div>
+    <div class="card"><h3>Stay Aware</h3><p>Avoid distractions like headphones and phones in unfamiliar areas.</p></div>
+    <div class="card"><h3>Save Emergency Numbers</h3><p>Keep emergency numbers on speed dial for quick access.</p></div>
+  </div>
+</div>
+
+<!-- ===== ALERTS ===== -->
+<div class="page" id="page-alerts">
+  <h1 class="page-title">📜 Alert History</h1>
+  <p class="subtitle">All your past SOS alerts.</p>
+  <div id="alertsList"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== Data Storage (localStorage) =====
+  const DB = {
+    getUser: () => JSON.parse(localStorage.getItem('user') || 'null'),
+    setUser: (u) => localStorage.setItem('user', JSON.stringify(u)),
+    logout: () => localStorage.removeItem('user'),
+    getContacts: () => JSON.parse(localStorage.getItem('contacts') || '[]'),
+    setContacts: (c) => localStorage.setItem('contacts', JSON.stringify(c)),
+    getAlerts: () => JSON.parse(localStorage.getItem('alerts') || '[]'),
+    setAlerts: (a) => localStorage.setItem('alerts', JSON.stringify(a))
+  };
+
+  // ===== Page Navigation =====
+  function showPage(name) {
+    if (['dashboard','contacts','location','alerts'].includes(name) && !DB.getUser()) {
+      toast('Please login first');
+      name = 'login';
+    }
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + name);
+    if (page) page.classList.add('active');
+    window.scrollTo(0, 0);
+
+    // Update login link
+    const loginLink = document.getElementById('loginLink');
+    if (DB.getUser()) {
+      loginLink.textContent = 'Logout';
+      loginLink.onclick = () => { DB.logout(); toast('Logged out'); showPage('home'); };
+    } else {
+      loginLink.textContent = 'Login';
+      loginLink.onclick = () => showPage('login');
+    }
+
+    if (name === 'dashboard') refreshDashboard();
+    if (name === 'contacts') renderContacts();
+    if (name === 'alerts') renderAlerts();
+  }
+
+  // ===== Toast =====
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ===== Auth =====
+  function register() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const password = document.getElementById('regPassword').value;
+    if (!name || !email || !password) return toast('Please fill all fields');
+    DB.setUser({ id: Date.now(), fullName: name, email, phoneNumber: phone });
+    toast('✅ Registered successfully!');
+    showPage('dashboard');
+  }
+
+  function login() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) return toast('Please fill all fields');
+    const name = email.split('@')[0];
+    DB.setUser({ id: Date.now(), fullName: name, email, phoneNumber: '' });
+    toast('✅ Logged in!');
+    showPage('dashboard');
+  }
+
+  function refreshDashboard() {
+    const u = DB.getUser();
+    if (u) document.getElementById('welcomeMsg').textContent = `Welcome, ${u.fullName} 👋`;
+  }
+
+  // ===== SOS =====
+  function triggerSOS() {
+    if (!navigator.geolocation) return toast('Geolocation not supported');
+    const status = document.getElementById('sosStatus');
+    status.textContent = 'Getting your location...';
+    status.style.color = '#7B1FA2';
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const alerts = DB.getAlerts();
+        const user = DB.getUser();
+        alerts.unshift({
+          id: Date.now(),
+          message: `🚨 EMERGENCY! ${user.fullName} needs help!`,
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          status: 'ACTIVE',
+          createdAt: new Date().toISOString()
+        });
+        DB.setAlerts(alerts);
+        status.textContent = '✅ SOS Alert sent! Contacts notified with your location.';
+        status.style.color = 'green';
+        toast('🚨 SOS sent to ' + DB.getContacts().length + ' contacts');
+      },
+      () => {
+        status.textContent = '❌ Location access denied. Enable it to send alerts.';
+        status.style.color = 'red';
+      }
+    );
+  }
+
+  // ===== Contacts =====
+  function addContact() {
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const rel = document.getElementById('cRel').value.trim();
+    const email = document.getElementById('cEmail').value.trim();
+    if (!name || !phone) return toast('Name and phone required');
+    const contacts = DB.getContacts();
+    contacts.push({ id: Date.now(), name, phoneNumber: phone, relationship: rel, email });
+    DB.setContacts(contacts);
+    document.getElementById('cName').value = '';
+    document.getElementById('cPhone').value = '';
+    document.getElementById('cRel').value = '';
+    document.getElementById('cEmail').value = '';
+    toast('✅ Contact added');
+    renderContacts();
+  }
+
+  function renderContacts() {
+    const list = document.getElementById('contactsList');
+    const contacts = DB.getContacts();
+    if (contacts.length === 0) {
+      list.innerHTML = '<p style="color:#888">No contacts yet. Add your first one above.</p>';
+      return;
+    }
+    list.innerHTML = contacts.map(c => `
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;text-align:left;margin-bottom:10px">
+        <div>
+          <strong>${c.name}</strong>
+          <p style="color:#666;margin:5px 0">📞 ${c.phoneNumber} ${c.relationship ? '• ' + c.relationship : ''}</p>
+          ${c.email ? `<p style="color:#888;font-size:13px">${c.email}</p>` : ''}
+        </div>
+        <button onclick="removeContact(${c.id})" style="background:#E91E63;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  function removeContact(id) {
+    if (!confirm('Remove this contact?')) return;
+    DB.setContacts(DB.getContacts().filter(c => c.id !== id));
+    renderContacts();
+  }
+
+  // ===== Location =====
+  function getLocation() {
+    if (!navigator.geolocation) return toast('Geolocation not supported');
+    document.getElementById('locInfo').innerHTML = 'Getting location...';
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude, lng = pos.coords.longitude;
+        document.getElementById('locInfo').innerHTML = `
+          <p><strong>Latitude:</strong> ${lat.toFixed(6)}</p>
+          <p><strong>Longitude:</strong> ${lng.toFixed(6)}</p>
+          <p><strong>Accuracy:</strong> ±${pos.coords.accuracy.toFixed(0)} m</p>
+          <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank"
+            style="color:#7B1FA2;font-weight:bold">🗺️ Open in Google Maps</a>
+        `;
+      },
+      () => { document.getElementById('locInfo').innerHTML = '<p style="color:red">Unable to get location</p>'; }
+    );
+  }
+
+  // ===== Alerts =====
+  function renderAlerts() {
+    const list = document.getElementById('alertsList');
+    const alerts = DB.getAlerts();
+    if (alerts.length === 0) {
+      list.innerHTML = '<div class="card"><div style="font-size:48px">✅</div><p>No alerts yet. Stay safe!</p></div>';
+      return;
+    }
+    list.innerHTML = alerts.map(a => `
+      <div class="card" style="text-align:left;margin-bottom:12px">
+        <span style="background:${a.status === 'ACTIVE' ? '#dc3545' : '#28a745'};color:white;padding:3px 12px;border-radius:12px;font-size:12px;font-weight:bold">${a.status}</span>
+        <span style="color:#888;font-size:13px;margin-left:10px">${new Date(a.createdAt).toLocaleString()}</span>
+        <p style="margin-top:10px">${a.message}</p>
+        ${a.lat ? `<a href="https://www.google.com/maps?q=${a.lat},${a.lng}" target="_blank" style="color:#7B1FA2;font-size:14px">📍 View location</a>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // Initialize
+  showPage('home');
+</script>
+</body>
+</html>
